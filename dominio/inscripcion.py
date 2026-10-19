@@ -47,21 +47,26 @@ def validar_visitante(visitante):
             "La edad debe ser un número entero entre 0 y 120")
 
 
+def validar_reglas_de_actividad(visitante, actividad):
+    if actividad in REQUIEREN_TALLE:
+        if not visitante.talle:
+            raise ErrorInscripcion(
+                f"{actividad} requiere el talle de cada visitante")
+        if visitante.talle not in TALLES:
+            raise ErrorInscripcion(
+                "El talle debe ser uno de: " + ", ".join(TALLES))
+    edad_minima = EDAD_MINIMA.get(actividad, 0)
+    if int(visitante.edad) < edad_minima:
+        raise ErrorInscripcion(
+            f"La edad mínima para {actividad} es {edad_minima} años")
+
+
 def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
               registro):
     validar_seleccion(actividad, horario)
     for visitante in visitantes:
         validar_visitante(visitante)
-        if actividad in REQUIEREN_TALLE and not visitante.talle:
-            raise ErrorInscripcion(
-                f"{actividad} requiere el talle de cada visitante")
-        if actividad in REQUIEREN_TALLE and visitante.talle not in TALLES:
-            raise ErrorInscripcion(
-                "El talle debe ser uno de: " + ", ".join(TALLES))
-        edad_minima = EDAD_MINIMA.get(actividad, 0)
-        if int(visitante.edad) < edad_minima:
-            raise ErrorInscripcion(
-                f"La edad mínima para {actividad} es {edad_minima} años")
+        validar_reglas_de_actividad(visitante, actividad)
     if not acepta_terminos:
         raise ErrorInscripcion(
             "Debe aceptar los términos y condiciones de la actividad")
