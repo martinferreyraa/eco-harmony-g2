@@ -43,6 +43,7 @@
 | 33 | `test_envia_mail_al_confirmar` | Primero fallaron los 43 tests con `TypeError` (faltaba el parámetro `enviador`); con el stub, quedó solo el nuevo: `assert 0 == 1` (no se enviaba ningún mail). | Nace el dataclass `Mail(asunto, cuerpo, qrs)`; `inscribir` llama a `enviador.enviar(mail)` después de validar y antes de registrar. Cuerpo y QR quedan vacíos hasta sus tests. | No hizo falta. |
 | 34 | `test_no_envia_mail_si_validacion_falla` | No hubo Red: pasó de entrada, porque en el ciclo 33 el envío quedó después de todas las validaciones. Fija ese orden. | No hizo falta código nuevo. | No hizo falta. |
 | 35 | `test_mail_incluye_resumen` | El cuerpo del mail estaba vacío: `assert "Actividad: Palestra" in ""`. | Nace `armar_cuerpo`: arma el texto línea por línea con actividad, fecha y hora, cantidad y una línea por visitante (con talle solo si tiene). | No hizo falta. |
+| 36 | `test_mail_incluye_numero_de_orden` | Con 2 inscripciones previas, el mail no decía el número de orden: `assert "Número de orden: 3" in ...`. | `inscribir` calcula `numero_orden = len(registro) + 1` antes del `append` y `armar_cuerpo` lo agrega como segunda línea. | No hizo falta. |
 
 ## Supuestos
 

@@ -142,9 +142,10 @@ def validar_superposicion(horario, visitantes, registro):
                 "horario")
 
 
-def armar_cuerpo(actividad, horario, visitantes):
+def armar_cuerpo(numero_orden, actividad, horario, visitantes):
     lineas = [
         "Tu inscripción fue confirmada.",
+        f"Número de orden: {numero_orden}",
         f"Actividad: {actividad}",
         f"Fecha y hora: {horario:%d/%m/%Y %H:%M}",
         f"Cantidad de personas: {len(visitantes)}",
@@ -173,7 +174,8 @@ def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
             "Debe aceptar los términos y condiciones de la actividad")
     validar_cupo(actividad, horario, cantidad, registro)
     validar_superposicion(horario, visitantes, registro)
-    cuerpo = armar_cuerpo(actividad, horario, visitantes)
+    numero_orden = len(registro) + 1
+    cuerpo = armar_cuerpo(numero_orden, actividad, horario, visitantes)
     mail = Mail(f"Inscripción confirmada: {actividad}", cuerpo, [])
     enviador.enviar(mail)
     inscripcion = Inscripcion(actividad, horario, visitantes)
