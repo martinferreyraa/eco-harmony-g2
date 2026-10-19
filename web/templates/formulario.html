@@ -1,36 +1,21 @@
 {% extends "base.html" %}
 {% from "macros.html" import error_de, error_general, marcar %}
-{% block titulo %}Inscripción a {{ actividad }} · EcoHarmony Park{% endblock %}
+{% block titulo %}Inscripción a {{ reserva.actividad }} · EcoHarmony Park{% endblock %}
 {% block contenido %}
 <section class="tarjeta">
-  <h1>Inscripción a {{ actividad or "una actividad" }}</h1>
-  <p class="ayuda">{{ cantidad }} persona{{ "s" if cantidad != 1 }} ·
-    <a href="{{ url_for('inicio') }}">cambiar actividad o cantidad</a></p>
-  {{ error_de("actividad", error) }}
-  {{ error_de("cantidad", error) }}
+  <h1>Inscripción a {{ reserva.actividad }}</h1>
+  <p class="turno-elegido">
+    {{ horario.strftime("%d/%m/%Y") }} a las {{ horario.strftime("%H:%M") }} hs
+    · {{ cantidad }} persona{{ "s" if cantidad != 1 }}
+  </p>
+  <p class="ayuda"><a href="{{ url_for('inicio', **reserva) }}">cambiar turno o cantidad</a></p>
   {{ error_general(error) }}
 
   <form method="post" action="{{ url_for('confirmar') }}" class="formulario">
-    <input type="hidden" name="actividad" value="{{ actividad }}">
-    <input type="hidden" name="cantidad" value="{{ cantidad }}">
-
-    <fieldset>
-      <legend>Turno</legend>
-      <label for="fecha">Fecha</label>
-      <input type="date" id="fecha" name="fecha" data-dias-cerrados
-             min="{{ fecha_minima }}" max="{{ fecha_maxima }}"
-             value="{{ valores.get('fecha', '') }}" {{ marcar("horario", error) }}>
-      <p class="aviso" data-aviso-fecha hidden></p>
-
-      <label for="hora">Hora</label>
-      <select id="hora" name="hora" {{ marcar("horario", error) }}>
-        <option value="">Elegí un horario</option>
-        {% for hora in horas %}
-        <option value="{{ hora }}" {{ "selected" if valores.get('hora') == hora|string }}>{{ "%02d"|format(hora) }}:00</option>
-        {% endfor %}
-      </select>
-      {{ error_de("horario", error) }}
-    </fieldset>
+    <input type="hidden" name="actividad" value="{{ reserva.actividad }}">
+    <input type="hidden" name="fecha" value="{{ reserva.fecha }}">
+    <input type="hidden" name="hora" value="{{ reserva.hora }}">
+    <input type="hidden" name="cantidad" value="{{ reserva.cantidad }}">
 
     {% set nombres = valores.getlist('nombre') %}
     {% set dnis = valores.getlist('dni') %}
@@ -82,7 +67,7 @@
         <input type="checkbox" name="acepta_terminos" value="si"
                {{ "checked" if valores.get('acepta_terminos') }}
                {{ marcar("terminos", error) }}>
-        Leí y acepto los términos y condiciones de {{ actividad }}
+        Leí y acepto los términos y condiciones de {{ reserva.actividad }}
       </label>
       {{ error_de("terminos", error) }}
     </fieldset>
@@ -90,8 +75,4 @@
     <button type="submit" class="boton">Confirmar inscripción</button>
   </form>
 </section>
-{% endblock %}
-{% block scripts %}
-<script id="dias-cerrados" type="application/json">{{ dias_cerrados | tojson }}</script>
-<script src="{{ url_for('static', filename='dias_cerrados.js') }}"></script>
 {% endblock %}

@@ -5,7 +5,7 @@ from werkzeug.datastructures import MultiDict
 
 from dominio.inscripcion import (ErrorInscripcion, Visitante, cupo_disponible,
                                  es_numero, es_reservable, inscribir,
-                                 validar_actividad)
+                                 validar_reserva)
 from dominio.reglas import (ACTIVIDADES, CUPOS, FERIADOS, HORA_PRIMER_TURNO,
                             HORA_ULTIMO_TURNO, LUNES, REQUIEREN_TALLE,
                             TALLES, TERMINOS)
@@ -17,6 +17,8 @@ app = Flask(__name__)
 HORAS = list(range(HORA_PRIMER_TURNO, HORA_ULTIMO_TURNO + 1))
 MAXIMO_PERSONAS = max(CUPOS.values())
 DIAS_CERRADOS = {"lunes": LUNES, "feriados": FERIADOS}
+# Errores que se corrigen en la primera pantalla
+CAMPOS_DE_LA_RESERVA = ["actividad", "horario", "cantidad"]
 
 
 def crear_registro():
@@ -43,6 +45,16 @@ def armar_horario(fecha, hora):
         return None
 
 
+def leer_reserva(datos):
+    """Los cuatro datos de la primera pantalla, tal como llegan."""
+    return {
+        "actividad": datos.get("actividad", ""),
+        "fecha": datos.get("fecha", ""),
+        "hora": datos.get("hora", ""),
+        "cantidad": datos.get("cantidad", ""),
+    }
+
+
 def armar_visitantes(formulario):
     visitantes = []
     datos = zip(formulario.getlist("nombre"), formulario.getlist("dni"),
@@ -52,58 +64,66 @@ def armar_visitantes(formulario):
     return visitantes
 
 
-def mostrar_formulario(actividad, cantidad, valores, error=None):
+# --- Pantallas
+
+def mostrar_inicio(reserva, error=None):
     hoy = datetime.now().date()
     return render_template(
-        "formulario.html", actividad=actividad, cantidad=cantidad,
-        horas=HORAS, talles=TALLES,
-        requiere_talle=actividad in REQUIEREN_TALLE,
-        terminos=TERMINOS.get(actividad, ""),
-        dias_cerrados=DIAS_CERRADOS, fecha_minima=hoy.isoformat(),
+        "inicio.html", actividades=ACTIVIDADES, horas=HORAS,
+        maximo_personas=MAXIMO_PERSONAS, dias_cerrados=DIAS_CERRADOS,
+        fecha_minima=hoy.isoformat(),
         fecha_maxima=(hoy + timedelta(days=1)).isoformat(),
-        valores=valores, error=error)
+        reserva=reserva, error=error)
+
+
+def mostrar_formulario(reserva, valores, error=None):
+    actividad = reserva["actividad"]
+    return render_template(
+        "formulario.html", reserva=reserva,
+        horario=armar_horario(reserva["fecha"], reserva["hora"]),
+        cantidad=a_entero(reserva["cantidad"]), talles=TALLES,
+        requiere_talle=actividad in REQUIEREN_TALLE,
+        terminos=TERMINOS.get(actividad, ""), valores=valores, error=error)
 
 
 # --- Rutas
 
-def mostrar_inicio(actividad="", cantidad=1, error=None):
-    return render_template("inicio.html", actividades=ACTIVIDADES,
-                           maximo_personas=MAXIMO_PERSONAS,
-                           actividad_elegida=actividad,
-                           cantidad_elegida=cantidad, error=error)
-
-
 @app.get("/")
 def inicio():
-    return mostrar_inicio()
+    # Si viene del link "cambiar turno o cantidad", trae los valores cargados
+    return mostrar_inicio(leer_reserva(request.args))
 
 
 @app.get("/inscripcion")
 def formulario():
-    actividad = request.args.get("actividad", "")
-    cantidad = a_entero(request.args.get("cantidad", ""))
+    reserva = leer_reserva(request.args)
+    horario = armar_horario(reserva["fecha"], reserva["hora"])
     try:
-        validar_actividad(actividad)
+        validar_reserva(reserva["actividad"], horario,
+                        a_entero(reserva["cantidad"]), registro,
+                        datetime.now())
     except ErrorInscripcion as error:
-        return mostrar_inicio(actividad, cantidad, error)
-    return mostrar_formulario(actividad, cantidad, MultiDict())
+        return mostrar_inicio(reserva, error)
+    return mostrar_formulario(reserva, MultiDict())
 
 
 @app.post("/inscripcion")
 def confirmar():
-    actividad = request.form.get("actividad", "")
-    cantidad = a_entero(request.form.get("cantidad", ""))
-    horario = armar_horario(request.form.get("fecha", ""),
-                            request.form.get("hora", ""))
+    reserva = leer_reserva(request.form)
+    horario = armar_horario(reserva["fecha"], reserva["hora"])
     visitantes = armar_visitantes(request.form)
     acepta_terminos = request.form.get("acepta_terminos") == "si"
     try:
-        inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
+        inscribir(reserva["actividad"], horario,
+                  a_entero(reserva["cantidad"]), visitantes, acepta_terminos,
                   registro, datetime.now(), enviador)
     except ErrorInscripcion as error:
-        return mostrar_formulario(actividad, cantidad, request.form, error)
-    return render_template("confirmacion.html", actividad=actividad,
-                           horario=horario, visitantes=visitantes)
+        if error.campo in CAMPOS_DE_LA_RESERVA:
+            return mostrar_inicio(reserva, error)
+        return mostrar_formulario(reserva, request.form, error)
+    return render_template("confirmacion.html",
+                           actividad=reserva["actividad"], horario=horario,
+                           visitantes=visitantes)
 
 
 @app.get("/cupos")
