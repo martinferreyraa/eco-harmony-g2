@@ -1,0 +1,4 @@
+pytest
+flask
+qrcode[pil]
+python-dotenv
