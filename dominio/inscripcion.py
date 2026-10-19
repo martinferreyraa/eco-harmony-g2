@@ -131,11 +131,12 @@ def es_reservable(turno, ahora):
 
 def validar_cantidad(cantidad, visitantes):
     if cantidad < 1:
-        raise ErrorInscripcion("Debe indicar al menos una persona")
+        raise ErrorInscripcion("Debe indicar al menos una persona",
+                               "cantidad")
     if cantidad != len(visitantes):
         raise ErrorInscripcion(
             "La cantidad de personas no coincide con los visitantes "
-            "ingresados")
+            "ingresados", "cantidad")
 
 
 def validar_dnis_distintos(visitantes):
@@ -164,7 +165,7 @@ def validar_cupo(actividad, horario, cantidad, registro):
     if cantidad > disponibles:
         raise ErrorInscripcion(
             f"Solo quedan {disponibles} lugares disponibles para "
-            f"{actividad} en ese horario")
+            f"{actividad} en ese horario", "cantidad")
 
 
 def validar_turno(horario):
