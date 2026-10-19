@@ -45,6 +45,7 @@
 | 35 | `test_mail_incluye_resumen` | El cuerpo del mail estaba vacío: `assert "Actividad: Palestra" in ""`. | Nace `armar_cuerpo`: arma el texto línea por línea con actividad, fecha y hora, cantidad y una línea por visitante (con talle solo si tiene). | No hizo falta. |
 | 36 | `test_mail_incluye_numero_de_orden` | Con 2 inscripciones previas, el mail no decía el número de orden: `assert "Número de orden: 3" in ...`. | `inscribir` calcula `numero_orden = len(registro) + 1` antes del `append` y `armar_cuerpo` lo agrega como segunda línea. | No hizo falta. |
 | 37 | `test_mail_incluye_qr_por_visitante` | El mail no traía ningún QR: `assert [] == ["Orden 1 \| Ana Pérez ...", ...]`. | Nace `texto_qr(numero_orden, visitante, actividad, horario)` en el dominio; `inscribir` arma un texto por visitante y los pone en `mail.qrs`. | Ver fila R7. |
+| R7 | Refactor del mail | — | — | El formato de fecha repetido pasó a la constante `FORMATO_FECHA_HORA` (con `strftime`) y el armado del mail con sus QR a `armar_mail`. 47 tests en verde. |
 
 ## Supuestos
 

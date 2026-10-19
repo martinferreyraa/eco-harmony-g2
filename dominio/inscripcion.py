@@ -8,6 +8,9 @@ from dominio.reglas import (ACTIVIDADES, ANTICIPACION_MAXIMA,
                             TALLES)
 
 
+FORMATO_FECHA_HORA = "%d/%m/%Y %H:%M"
+
+
 class ErrorInscripcion(Exception):
     pass
 
@@ -147,7 +150,7 @@ def armar_cuerpo(numero_orden, actividad, horario, visitantes):
         "Tu inscripción fue confirmada.",
         f"Número de orden: {numero_orden}",
         f"Actividad: {actividad}",
-        f"Fecha y hora: {horario:%d/%m/%Y %H:%M}",
+        "Fecha y hora: " + horario.strftime(FORMATO_FECHA_HORA),
         f"Cantidad de personas: {len(visitantes)}",
         "Visitantes:",
     ]
@@ -161,9 +164,17 @@ def armar_cuerpo(numero_orden, actividad, horario, visitantes):
 
 
 def texto_qr(numero_orden, visitante, actividad, horario):
+    fecha_hora = horario.strftime(FORMATO_FECHA_HORA)
     return (f"Orden {numero_orden} | {visitante.nombre} | "
-            f"DNI {visitante.dni} | {actividad} | "
-            f"{horario:%d/%m/%Y %H:%M}")
+            f"DNI {visitante.dni} | {actividad} | {fecha_hora}")
+
+
+def armar_mail(numero_orden, actividad, horario, visitantes):
+    cuerpo = armar_cuerpo(numero_orden, actividad, horario, visitantes)
+    qrs = []
+    for visitante in visitantes:
+        qrs.append(texto_qr(numero_orden, visitante, actividad, horario))
+    return Mail(f"Inscripción confirmada: {actividad}", cuerpo, qrs)
 
 
 def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
@@ -181,11 +192,7 @@ def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
     validar_cupo(actividad, horario, cantidad, registro)
     validar_superposicion(horario, visitantes, registro)
     numero_orden = len(registro) + 1
-    cuerpo = armar_cuerpo(numero_orden, actividad, horario, visitantes)
-    qrs = []
-    for visitante in visitantes:
-        qrs.append(texto_qr(numero_orden, visitante, actividad, horario))
-    mail = Mail(f"Inscripción confirmada: {actividad}", cuerpo, qrs)
+    mail = armar_mail(numero_orden, actividad, horario, visitantes)
     enviador.enviar(mail)
     inscripcion = Inscripcion(actividad, horario, visitantes)
     registro.append(inscripcion)
