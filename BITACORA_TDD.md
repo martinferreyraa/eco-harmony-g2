@@ -10,3 +10,4 @@
 | 6 | `test_edad_vacia` | Un visitante sin edad se registraba igual: `DID NOT RAISE ErrorInscripcion`. | Dentro del mismo recorrido se agregó el chequeo de la edad vacía. | No hizo falta (se refactoriza al cerrar el grupo de presencia). |
 | 7 | `test_no_acepta_terminos` | Sin aceptar los términos se registraba igual: `DID NOT RAISE ErrorInscripcion`. | `inscribir` lanza error si `acepta_terminos` es falso. | No hizo falta. |
 | 8 | `test_actividad_inexistente` | "Buceo" se registraba como si existiera: `DID NOT RAISE ErrorInscripcion`. | Nació `reglas.py` con `ACTIVIDADES`; `inscribir` lanza error si la actividad no está en esa lista. | Al cerrar el grupo de presencia: ver fila siguiente. |
+| R1 | Refactor del grupo 2 (presencia) | — | — | Se extrajeron `validar_seleccion` (actividad y horario) y `validar_visitante` (nombre, DNI, edad); `inscribir` queda como una lista de pasos. 8 tests en verde. |
