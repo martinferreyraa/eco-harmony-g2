@@ -425,3 +425,18 @@ def test_mail_incluye_resumen(datos_validos, enviador):
     assert "Fecha y hora: 20/10/2026 12:00" in cuerpo
     assert "Cantidad de personas: 1" in cuerpo
     assert "Ana Pérez, DNI 30123456, 25 años, talle M" in cuerpo
+
+
+def test_mail_incluye_numero_de_orden(datos_validos, registro, enviador):
+    # Arrange: ya hay 2 inscripciones en otro turno, esta es la número 3
+    otro_turno = datetime(2026, 10, 20, 15, 0)
+    registro.append(Inscripcion("Jardinería", otro_turno,
+                                crear_visitantes(1)))
+    registro.append(Inscripcion("Jardinería", otro_turno,
+                                crear_visitantes(1)))
+
+    # Act
+    inscribir(**datos_validos)
+
+    # Assert
+    assert "Número de orden: 3" in enviador.enviados[0].cuerpo
