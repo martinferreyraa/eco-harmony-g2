@@ -15,6 +15,7 @@
 | 10 | `test_edad_invalida` (4 casos) | "abc", "-1", "2.5" y "121" se aceptaban como edad: 4 `DID NOT RAISE`. | `validar_visitante` exige que la edad sea solo dígitos (descarta negativos y decimales) y no supere 120. | No hizo falta. |
 | 11 | `test_edad_cero_valida` | No hubo Red: pasó de entrada, porque "0" ya cumplía la regla del ciclo 10. Se deja para fijar la decisión de que 0 es válido. | No hizo falta código nuevo. | No hizo falta. |
 | 12 | `test_talle_requerido_faltante` | En Palestra, un visitante sin talle se registraba igual: `DID NOT RAISE ErrorInscripcion`. | `Visitante` suma `talle` (vacío por defecto), nace `REQUIEREN_TALLE` en `reglas.py` y se lanza error si la actividad lo pide y falta. | No hizo falta (se espera al resto del grupo). |
+| 13 | `test_talle_no_requerido_omitido` | No hubo Red: pasó de entrada, porque el ciclo 12 solo pide talle a las actividades de `REQUIEREN_TALLE`. Cubre la prueba de usuario de la US "sin talle porque no lo requiere (pasa)". | No hizo falta código nuevo. | No hizo falta. |
 
 ## Supuestos
 

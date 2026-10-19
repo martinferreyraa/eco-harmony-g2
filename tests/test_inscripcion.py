@@ -135,3 +135,14 @@ def test_talle_requerido_faltante(datos_validos, registro):
                        match="Palestra requiere el talle de cada visitante"):
         inscribir(**datos_validos)
     assert len(registro) == 0
+
+
+def test_talle_no_requerido_omitido(datos_validos, registro):
+    # Arrange: Jardinería no requiere talle y el visitante no lo trae
+    datos_validos["actividad"] = "Jardinería"
+
+    # Act
+    inscribir(**datos_validos)
+
+    # Assert
+    assert len(registro) == 1
