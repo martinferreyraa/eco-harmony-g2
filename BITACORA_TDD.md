@@ -71,3 +71,5 @@ Cosas que no estaban escritas en CLAUDE.md y se resolvieron con la opción más 
 - Si no hay ningún turno reservable en las próximas 24 hs (por ejemplo, un domingo a la noche), `crear_seed` devuelve un registro vacío: la demo no muestra el caso "sin cupo", pero la app no se rompe.
 - El test del seed vive en `tests/test_seed.py`, separado de los de `inscribir`.
 - Los textos de `TERMINOS` los redactamos nosotros (FAQ #16) y quedan a revisión del grupo y de los PO; no tienen test porque son contenido, no comportamiento.
+- `EnviadorSMTP` revisa al crearse que estén las 5 variables del `.env` y, si falta alguna, corta con un mensaje claro ("Falta configurar ... en .env"). Es configuración, no una regla de negocio, por eso no está en el dominio.
+- `imagen_qr` y `EnviadorSMTP` no tienen tests automáticos: se verificaron a mano (la imagen es un PNG válido y el mensaje lleva asunto, destinatario y un adjunto por visitante). El envío real se prueba con un `.env` real en la demo.
