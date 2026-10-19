@@ -36,6 +36,9 @@ def validar_visitante(visitante):
         raise ErrorInscripcion("Debe ingresar el nombre de cada visitante")
     if not visitante.dni:
         raise ErrorInscripcion("Debe ingresar el DNI de cada visitante")
+    if not visitante.dni.isdigit() or len(visitante.dni) not in (7, 8):
+        raise ErrorInscripcion(
+            "El DNI debe tener 7 u 8 dígitos, sin puntos ni espacios")
     if not visitante.edad:
         raise ErrorInscripcion("Debe ingresar la edad de cada visitante")
 
