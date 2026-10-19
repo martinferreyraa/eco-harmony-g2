@@ -47,10 +47,13 @@ enviarlos a validar a los PO.
 
 ## Stack
 
-- Python 3, `pytest`, `Flask` (con Jinja), `qrcode`, `python-dotenv`.
+- Python 3, `pytest`, `Flask` (con Jinja), `qrcode`, `python-dotenv`,
+  `sqlite3` (de la librería estándar).
 - Front: HTML + CSS propio, responsive (se prueba con DevTools en modo celular).
   Fuente **Lato** (Google Fonts). Paleta: `#386641`, `#6A994E`, `#A7C957`, `#F2E8CF`, `#BC4749`.
-- Sin base de datos: los datos salen de un seed en memoria (`dominio/seed.py`).
+- Base de datos SQLite en `eco_harmony.db` (raíz del proyecto, ignorada por git;
+  se crea sola si no existe). En cada arranque, `crear_seed` llena el próximo
+  turno reservable de Safari si no está lleno (es idempotente: no lo duplica).
 - Comandos permitidos en la demo: `pytest` y `flask --app web/app run`.
 
 ## Estructura
@@ -63,6 +66,7 @@ dominio/
 servicios/
   mail.py          # EnviadorSMTP (real, lee credenciales de .env)
   qr.py            # convierte el texto del QR en imagen (sin test)
+  registro_sqlite.py  # RegistroSQLite: guarda las inscripciones en SQLite
 web/
   app.py           # Flask, capa delgada
   templates/
@@ -70,10 +74,13 @@ web/
 tests/
   conftest.py      # fixtures: seed limpio, EnviadorFalso, "ahora" fijo
   test_inscripcion.py
+  test_seed.py
+  test_registro_sqlite.py  # con archivos temporales (tmp_path)
 .env.example       # SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, MAIL_USUARIO_MOCK
 ```
 
-`dominio/` nunca importa de `web/` ni de `servicios/`. Los tests solo importan de `dominio/`.
+`dominio/` nunca importa de `web/` ni de `servicios/`. Los tests solo importan de
+`dominio/` y de `servicios/registro_sqlite.py`.
 
 ## Decisiones de diseño clave
 
@@ -83,6 +90,11 @@ tests/
 - **Enviador inyectado:** `inscribir(..., enviador)`. La app usa `EnviadorSMTP` (mail real),
   y los tests usan `EnviadorFalso`, que guarda lo enviado en una lista. Los tests NUNCA
   mandan mails reales.
+- **Registro inyectado:** `inscribir(..., registro)` solo usa `append`, recorrerlo
+  y `len`. Los tests pasan una lista; la app pasa `RegistroSQLite(ruta)`, que tiene
+  esas tres operaciones sobre dos tablas (`inscripciones` y `visitantes`). Cada
+  `append` guarda la inscripción y sus visitantes en una sola transacción, y cada
+  operación abre y cierra su conexión (Flask atiende con hilos).
 - **Usuario mockeado** (FAQ #19): sin registro ni login. El mail destino es
   `MAIL_USUARIO_MOCK` del `.env`.
 - **Credenciales:** `.env` está en `.gitignore`. El repo es público, así que solo se sube `.env.example`.
@@ -177,6 +189,10 @@ tests/
    `test_dni_repetido_misma_inscripcion`
 10. GUI web (sin tests): formulario, confirmación y estilos. El seed se arma a
     partir de la hora actual (sin fechas escritas a mano).
+11. Persistencia en SQLite (decisión del grupo):
+    `test_registro_guarda_y_lee_una_inscripcion`, `test_registro_cuenta_inscripciones`,
+    `test_otra_instancia_ve_lo_guardado`, `test_seed_no_duplica_el_turno_lleno`,
+    `test_seed_completa_el_turno_con_lugares_ocupados`
 
 Estilo de los tests: estructura Arrange / Act / Assert, datos fáciles de leer,
 tests independientes entre sí (cada uno arma su propio seed mediante fixture).
