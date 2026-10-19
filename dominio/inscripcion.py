@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime
 
-from dominio.reglas import ACTIVIDADES
+from dominio.reglas import ACTIVIDADES, REQUIEREN_TALLE
 
 
 class ErrorInscripcion(Exception):
@@ -13,6 +13,7 @@ class Visitante:
     nombre: str
     dni: str
     edad: str
+    talle: str = ""
 
 
 @dataclass
@@ -51,6 +52,9 @@ def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
     validar_seleccion(actividad, horario)
     for visitante in visitantes:
         validar_visitante(visitante)
+        if actividad in REQUIEREN_TALLE and not visitante.talle:
+            raise ErrorInscripcion(
+                f"{actividad} requiere el talle de cada visitante")
     if not acepta_terminos:
         raise ErrorInscripcion(
             "Debe aceptar los términos y condiciones de la actividad")
