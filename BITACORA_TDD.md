@@ -23,6 +23,7 @@
 | 17 | `test_edad_igual_minimo_pasa` | No hubo Red: pasó de entrada, porque la regla usa `<` (12 no es menor que 12). Fija que el mínimo es inclusivo. | No hizo falta código nuevo. | No hizo falta. |
 | 18 | `test_safari_sin_limite_edad` | No hubo Red: pasó de entrada, porque Safari no está en `EDAD_MINIMA` y usa 0. | No hizo falta código nuevo. | Ver fila R3. |
 | R3 | Refactor del grupo 4 (por actividad) | — | — | Talle y edad mínima pasaron a `validar_reglas_de_actividad`; el doble `actividad in REQUIEREN_TALLE` quedó en un solo `if`. 25 tests en verde. |
+| 19 | `test_cantidad_cero` | Una inscripción de 0 personas se registraba: `DID NOT RAISE ErrorInscripcion`. | `inscribir` lanza error si `cantidad` es menor que 1. | No hizo falta. |
 
 ## Supuestos
 
@@ -35,3 +36,4 @@ Cosas que no estaban escritas en CLAUDE.md y se resolvieron con la opción más 
 - Si hay más de un error, se informa solo el primero que se encuentra.
 - El talle se compara tal cual, en mayúsculas ("m" no es válido): en la GUI se elige de una lista, así que siempre llega bien escrito.
 - Un talle inválido enviado a una actividad que no requiere talle también se ignora (no se valida).
+- La cantidad de personas llega como número entero: en la GUI se elige de una lista desplegable y la web la convierte con `int(...)`.

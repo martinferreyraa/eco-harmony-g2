@@ -64,6 +64,8 @@ def validar_reglas_de_actividad(visitante, actividad):
 def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
               registro):
     validar_seleccion(actividad, horario)
+    if cantidad < 1:
+        raise ErrorInscripcion("Debe indicar al menos una persona")
     for visitante in visitantes:
         validar_visitante(visitante)
         validar_reglas_de_actividad(visitante, actividad)
