@@ -84,5 +84,10 @@ def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
     if ocupados >= CUPOS[actividad]:
         raise ErrorInscripcion(
             f"No hay cupo disponible para {actividad} en ese horario")
+    disponibles = CUPOS[actividad] - ocupados
+    if cantidad > disponibles:
+        raise ErrorInscripcion(
+            f"Solo quedan {disponibles} lugares disponibles para "
+            f"{actividad} en ese horario")
     inscripcion = Inscripcion(actividad, horario, visitantes)
     registro.append(inscripcion)
