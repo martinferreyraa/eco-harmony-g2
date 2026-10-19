@@ -9,3 +9,6 @@ class RegistroSQLite:
 
     def __iter__(self):
         return iter(self.inscripciones)
+
+    def __len__(self):
+        return len(self.inscripciones)
