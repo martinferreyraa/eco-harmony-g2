@@ -53,9 +53,11 @@ def test_nombre_vacio(datos_validos, registro):
     datos_validos["visitantes"][0].nombre = ""
 
     # Act y Assert
-    with pytest.raises(ErrorInscripcion,
-                       match="Debe ingresar el nombre de cada visitante"):
+    with pytest.raises(
+            ErrorInscripcion,
+            match="Debe ingresar el nombre de cada visitante") as error:
         inscribir(**datos_validos)
+    assert error.value.campo == "nombre-0"
     assert len(registro) == 0
 
 
@@ -64,9 +66,11 @@ def test_dni_vacio(datos_validos, registro):
     datos_validos["visitantes"][0].dni = ""
 
     # Act y Assert
-    with pytest.raises(ErrorInscripcion,
-                       match="Debe ingresar el DNI de cada visitante"):
+    with pytest.raises(
+            ErrorInscripcion,
+            match="Debe ingresar el DNI de cada visitante") as error:
         inscribir(**datos_validos)
+    assert error.value.campo == "dni-0"
     assert len(registro) == 0
 
 
@@ -75,9 +79,11 @@ def test_edad_vacia(datos_validos, registro):
     datos_validos["visitantes"][0].edad = ""
 
     # Act y Assert
-    with pytest.raises(ErrorInscripcion,
-                       match="Debe ingresar la edad de cada visitante"):
+    with pytest.raises(
+            ErrorInscripcion,
+            match="Debe ingresar la edad de cada visitante") as error:
         inscribir(**datos_validos)
+    assert error.value.campo == "edad-0"
     assert len(registro) == 0
 
 
@@ -86,8 +92,9 @@ def test_no_acepta_terminos(datos_validos, registro):
     datos_validos["acepta_terminos"] = False
 
     # Act y Assert
-    with pytest.raises(ErrorInscripcion,
-                       match="Debe aceptar los términos y condiciones") as error:
+    with pytest.raises(
+            ErrorInscripcion,
+            match="Debe aceptar los términos y condiciones") as error:
         inscribir(**datos_validos)
     assert error.value.campo == "terminos"
     assert len(registro) == 0
@@ -114,8 +121,9 @@ def test_dni_invalido(datos_validos, registro, dni):
 
     # Act y Assert
     with pytest.raises(ErrorInscripcion,
-                       match="El DNI debe tener 7 u 8 dígitos"):
+                       match="El DNI debe tener 7 u 8 dígitos") as error:
         inscribir(**datos_validos)
+    assert error.value.campo == "dni-0"
     assert len(registro) == 0
 
 
@@ -126,8 +134,9 @@ def test_edad_invalida(datos_validos, registro, edad):
 
     # Act y Assert
     with pytest.raises(ErrorInscripcion,
-                       match="La edad debe ser un número entero"):
+                       match="La edad debe ser un número entero") as error:
         inscribir(**datos_validos)
+    assert error.value.campo == "edad-0"
     assert len(registro) == 0
 
 
@@ -147,9 +156,11 @@ def test_talle_requerido_faltante(datos_validos, registro):
     datos_validos["actividad"] = "Palestra"
 
     # Act y Assert
-    with pytest.raises(ErrorInscripcion,
-                       match="Palestra requiere el talle de cada visitante"):
+    with pytest.raises(
+            ErrorInscripcion,
+            match="Palestra requiere el talle de cada visitante") as error:
         inscribir(**datos_validos)
+    assert error.value.campo == "talle-0"
     assert len(registro) == 0
 
 
@@ -170,8 +181,10 @@ def test_talle_invalido(datos_validos, registro):
     datos_validos["visitantes"][0].talle = "XXXL"
 
     # Act y Assert
-    with pytest.raises(ErrorInscripcion, match="El talle debe ser uno de"):
+    with pytest.raises(ErrorInscripcion,
+                       match="El talle debe ser uno de") as error:
         inscribir(**datos_validos)
+    assert error.value.campo == "talle-0"
     assert len(registro) == 0
 
 
@@ -182,9 +195,11 @@ def test_edad_menor_minimo_palestra(datos_validos, registro):
     datos_validos["visitantes"][0].edad = "11"
 
     # Act y Assert
-    with pytest.raises(ErrorInscripcion,
-                       match="La edad mínima para Palestra es 12 años"):
+    with pytest.raises(
+            ErrorInscripcion,
+            match="La edad mínima para Palestra es 12 años") as error:
         inscribir(**datos_validos)
+    assert error.value.campo == "edad-0"
     assert len(registro) == 0
 
 
@@ -195,9 +210,11 @@ def test_edad_menor_minimo_tirolesa(datos_validos, registro):
     datos_validos["visitantes"][0].edad = "7"
 
     # Act y Assert
-    with pytest.raises(ErrorInscripcion,
-                       match="La edad mínima para Tirolesa es 8 años"):
+    with pytest.raises(
+            ErrorInscripcion,
+            match="La edad mínima para Tirolesa es 8 años") as error:
         inscribir(**datos_validos)
+    assert error.value.campo == "edad-0"
     assert len(registro) == 0
 
 
@@ -403,9 +420,11 @@ def test_dni_inscripto_mismo_horario(datos_validos, registro):
     registro.append(Inscripcion("Tirolesa", datos_validos["horario"], [ana]))
 
     # Act y Assert
-    with pytest.raises(ErrorInscripcion,
-                       match="El DNI 30123456 ya tiene una inscripción"):
+    with pytest.raises(
+            ErrorInscripcion,
+            match="El DNI 30123456 ya tiene una inscripción") as error:
         inscribir(**datos_validos)
+    assert error.value.campo == "dni-0"
     assert len(registro) == 1
 
 
@@ -498,8 +517,9 @@ def test_dni_repetido_misma_inscripcion(datos_validos, registro):
 
     # Act y Assert
     with pytest.raises(ErrorInscripcion,
-                       match="El DNI 30123456 está repetido"):
+                       match="El DNI 30123456 está repetido") as error:
         inscribir(**datos_validos)
+    assert error.value.campo == "dni-1"
     assert len(registro) == 0
 
 
@@ -512,6 +532,20 @@ def test_nombre_invalido(datos_validos, registro, nombre):
 
     # Act y Assert
     with pytest.raises(ErrorInscripcion,
-                       match="Ingresá el nombre completo"):
+                       match="Ingresá el nombre completo") as error:
         inscribir(**datos_validos)
+    assert error.value.campo == "nombre-0"
+    assert len(registro) == 0
+
+
+def test_error_de_visitante_indica_su_numero(datos_validos, registro):
+    # Arrange: el segundo visitante (índice 1) no tiene edad
+    datos_validos["cantidad"] = 2
+    datos_validos["visitantes"].append(
+        Visitante("Luis Gómez", "31234567", ""))
+
+    # Act y Assert
+    with pytest.raises(ErrorInscripcion) as error:
+        inscribir(**datos_validos)
+    assert error.value.campo == "edad-1"
     assert len(registro) == 0
