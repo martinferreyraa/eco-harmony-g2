@@ -24,6 +24,7 @@
 | 18 | `test_safari_sin_limite_edad` | No hubo Red: pasó de entrada, porque Safari no está en `EDAD_MINIMA` y usa 0. | No hizo falta código nuevo. | Ver fila R3. |
 | R3 | Refactor del grupo 4 (por actividad) | — | — | Talle y edad mínima pasaron a `validar_reglas_de_actividad`; el doble `actividad in REQUIEREN_TALLE` quedó en un solo `if`. 25 tests en verde. |
 | 19 | `test_cantidad_cero` | Una inscripción de 0 personas se registraba: `DID NOT RAISE ErrorInscripcion`. | `inscribir` lanza error si `cantidad` es menor que 1. | No hizo falta. |
+| 20 | `test_cantidad_no_coincide_con_visitantes` | Con cantidad 2 y un solo visitante cargado, se registraba igual: `DID NOT RAISE ErrorInscripcion`. | `inscribir` compara `cantidad` con `len(visitantes)` y lanza error si son distintos. | No hizo falta. |
 
 ## Supuestos
 
