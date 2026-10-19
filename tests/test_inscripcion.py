@@ -170,3 +170,16 @@ def test_edad_menor_minimo_palestra(datos_validos, registro):
                        match="La edad mínima para Palestra es 12 años"):
         inscribir(**datos_validos)
     assert len(registro) == 0
+
+
+def test_edad_menor_minimo_tirolesa(datos_validos, registro):
+    # Arrange
+    datos_validos["actividad"] = "Tirolesa"
+    datos_validos["visitantes"][0].talle = "S"
+    datos_validos["visitantes"][0].edad = "7"
+
+    # Act y Assert
+    with pytest.raises(ErrorInscripcion,
+                       match="La edad mínima para Tirolesa es 8 años"):
+        inscribir(**datos_validos)
+    assert len(registro) == 0
