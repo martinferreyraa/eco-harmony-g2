@@ -60,6 +60,8 @@ def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
                 "El talle debe ser uno de: " + ", ".join(TALLES))
         if actividad == "Palestra" and int(visitante.edad) < 12:
             raise ErrorInscripcion("La edad mínima para Palestra es 12 años")
+        if actividad == "Tirolesa" and int(visitante.edad) < 8:
+            raise ErrorInscripcion("La edad mínima para Tirolesa es 8 años")
     if not acepta_terminos:
         raise ErrorInscripcion(
             "Debe aceptar los términos y condiciones de la actividad")
