@@ -297,3 +297,14 @@ def test_turno_fuera_de_rango(datos_validos, registro, horario):
                        match="El horario debe ser un turno en punto"):
         inscribir(**datos_validos)
     assert len(registro) == 0
+
+
+def test_dia_lunes_cerrado(datos_validos, registro):
+    # Arrange: el 26/10/2026 es lunes
+    datos_validos["horario"] = datetime(2026, 10, 26, 12, 0)
+
+    # Act y Assert
+    with pytest.raises(ErrorInscripcion,
+                       match="El parque está cerrado los lunes"):
+        inscribir(**datos_validos)
+    assert len(registro) == 0
