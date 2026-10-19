@@ -84,9 +84,7 @@ def validar_cupo(actividad, horario, cantidad, registro):
             f"{actividad} en ese horario")
 
 
-def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
-              registro, ahora):
-    validar_seleccion(actividad, horario)
+def validar_turno(horario):
     es_turno_en_punto = horario.minute == 0
     esta_en_rango = HORA_PRIMER_TURNO <= horario.hour <= HORA_ULTIMO_TURNO
     if not es_turno_en_punto or not esta_en_rango:
@@ -97,6 +95,9 @@ def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
         raise ErrorInscripcion("El parque está cerrado los lunes")
     if (horario.day, horario.month) in FERIADOS:
         raise ErrorInscripcion("El parque está cerrado el 25/12 y el 1/1")
+
+
+def validar_anticipacion(horario, ahora):
     if horario < ahora:
         raise ErrorInscripcion("El turno seleccionado ya pasó")
     if horario - ahora > ANTICIPACION_MAXIMA:
@@ -105,6 +106,13 @@ def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
     if horario - ahora < ANTICIPACION_MINIMA:
         raise ErrorInscripcion(
             "Se debe reservar al menos 15 minutos antes del turno")
+
+
+def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
+              registro, ahora):
+    validar_seleccion(actividad, horario)
+    validar_turno(horario)
+    validar_anticipacion(horario, ahora)
     if cantidad < 1:
         raise ErrorInscripcion("Debe indicar al menos una persona")
     if cantidad != len(visitantes):
