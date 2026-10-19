@@ -124,3 +124,14 @@ def test_edad_cero_valida(datos_validos, registro):
 
     # Assert
     assert len(registro) == 1
+
+
+def test_talle_requerido_faltante(datos_validos, registro):
+    # Arrange: Palestra requiere talle y el visitante no lo trae
+    datos_validos["actividad"] = "Palestra"
+
+    # Act y Assert
+    with pytest.raises(ErrorInscripcion,
+                       match="Palestra requiere el talle de cada visitante"):
+        inscribir(**datos_validos)
+    assert len(registro) == 0
