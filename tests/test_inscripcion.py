@@ -409,3 +409,19 @@ def test_no_envia_mail_si_validacion_falla(datos_validos, enviador):
 
     # Assert
     assert enviador.enviados == []
+
+
+def test_mail_incluye_resumen(datos_validos, enviador):
+    # Arrange
+    datos_validos["actividad"] = "Palestra"
+    datos_validos["visitantes"][0].talle = "M"
+
+    # Act
+    inscribir(**datos_validos)
+
+    # Assert
+    cuerpo = enviador.enviados[0].cuerpo
+    assert "Actividad: Palestra" in cuerpo
+    assert "Fecha y hora: 20/10/2026 12:00" in cuerpo
+    assert "Cantidad de personas: 1" in cuerpo
+    assert "Ana Pérez, DNI 30123456, 25 años, talle M" in cuerpo
