@@ -343,3 +343,14 @@ def test_reserva_mas_de_24hs_antes(datos_validos, registro):
                        match="Solo se puede reservar desde 24 hs antes"):
         inscribir(**datos_validos)
     assert len(registro) == 0
+
+
+def test_reserva_menos_de_15min_antes(datos_validos, registro):
+    # Arrange: son las 11:50 y el turno es a las 12:00
+    datos_validos["ahora"] = datetime(2026, 10, 20, 11, 50)
+
+    # Act y Assert
+    with pytest.raises(ErrorInscripcion,
+                       match="Se debe reservar al menos 15 minutos antes"):
+        inscribir(**datos_validos)
+    assert len(registro) == 0
