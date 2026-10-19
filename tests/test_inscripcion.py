@@ -183,3 +183,16 @@ def test_edad_menor_minimo_tirolesa(datos_validos, registro):
                        match="La edad mínima para Tirolesa es 8 años"):
         inscribir(**datos_validos)
     assert len(registro) == 0
+
+
+def test_edad_igual_minimo_pasa(datos_validos, registro):
+    # Arrange: 12 años es justo el mínimo de Palestra
+    datos_validos["actividad"] = "Palestra"
+    datos_validos["visitantes"][0].talle = "M"
+    datos_validos["visitantes"][0].edad = "12"
+
+    # Act
+    inscribir(**datos_validos)
+
+    # Assert
+    assert len(registro) == 1
