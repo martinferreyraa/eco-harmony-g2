@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from datetime import datetime
 
+from dominio.reglas import ACTIVIDADES
+
 
 class ErrorInscripcion(Exception):
     pass
@@ -24,6 +26,8 @@ def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
               registro):
     if not actividad:
         raise ErrorInscripcion("Debe seleccionar una actividad")
+    if actividad not in ACTIVIDADES:
+        raise ErrorInscripcion("La actividad seleccionada no existe")
     if not horario:
         raise ErrorInscripcion("Debe seleccionar un horario")
     for visitante in visitantes:
