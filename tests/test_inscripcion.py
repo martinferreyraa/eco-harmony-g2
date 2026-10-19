@@ -397,3 +397,15 @@ def test_envia_mail_al_confirmar(datos_validos, enviador):
 
     # Assert
     assert len(enviador.enviados) == 1
+
+
+def test_no_envia_mail_si_validacion_falla(datos_validos, enviador):
+    # Arrange: un dato inválido (no acepta los términos)
+    datos_validos["acepta_terminos"] = False
+
+    # Act
+    with pytest.raises(ErrorInscripcion):
+        inscribir(**datos_validos)
+
+    # Assert
+    assert enviador.enviados == []
