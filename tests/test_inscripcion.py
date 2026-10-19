@@ -42,8 +42,9 @@ def test_no_seleccionar_horario(datos_validos, registro):
 
     # Act y Assert
     with pytest.raises(ErrorInscripcion,
-                       match="Debe seleccionar un horario"):
+                       match="Debe seleccionar un horario") as error:
         inscribir(**datos_validos)
+    assert error.value.campo == "horario"
     assert len(registro) == 0
 
 
@@ -254,8 +255,9 @@ def test_actividad_sin_cupo(datos_validos, registro):
 
     # Act y Assert
     with pytest.raises(ErrorInscripcion,
-                       match="No hay cupo disponible para Safari"):
+                       match="No hay cupo disponible para Safari") as error:
         inscribir(**datos_validos)
+    assert error.value.campo == "horario"
     assert len(registro) == 1
 
 
@@ -297,8 +299,9 @@ def test_turno_fuera_de_rango(datos_validos, registro, horario):
 
     # Act y Assert
     with pytest.raises(ErrorInscripcion,
-                       match="El horario debe ser un turno en punto"):
+                       match="El horario debe ser un turno en punto") as error:
         inscribir(**datos_validos)
+    assert error.value.campo == "horario"
     assert len(registro) == 0
 
 
@@ -308,8 +311,9 @@ def test_dia_lunes_cerrado(datos_validos, registro):
 
     # Act y Assert
     with pytest.raises(ErrorInscripcion,
-                       match="El parque está cerrado los lunes"):
+                       match="El parque está cerrado los lunes") as error:
         inscribir(**datos_validos)
+    assert error.value.campo == "horario"
     assert len(registro) == 0
 
 
@@ -320,9 +324,11 @@ def test_dia_feriado_cerrado(datos_validos, registro, horario):
     datos_validos["horario"] = horario
 
     # Act y Assert
-    with pytest.raises(ErrorInscripcion,
-                       match="El parque está cerrado el 25/12 y el 1/1"):
+    with pytest.raises(
+            ErrorInscripcion,
+            match="El parque está cerrado el 25/12 y el 1/1") as error:
         inscribir(**datos_validos)
+    assert error.value.campo == "horario"
     assert len(registro) == 0
 
 
@@ -332,8 +338,9 @@ def test_turno_ya_pasado(datos_validos, registro):
 
     # Act y Assert
     with pytest.raises(ErrorInscripcion,
-                       match="El turno seleccionado ya pasó"):
+                       match="El turno seleccionado ya pasó") as error:
         inscribir(**datos_validos)
+    assert error.value.campo == "horario"
     assert len(registro) == 0
 
 
@@ -342,9 +349,11 @@ def test_reserva_mas_de_24hs_antes(datos_validos, registro):
     datos_validos["horario"] = datetime(2026, 10, 21, 11, 0)
 
     # Act y Assert
-    with pytest.raises(ErrorInscripcion,
-                       match="Solo se puede reservar desde 24 hs antes"):
+    with pytest.raises(
+            ErrorInscripcion,
+            match="Solo se puede reservar desde 24 hs antes") as error:
         inscribir(**datos_validos)
+    assert error.value.campo == "horario"
     assert len(registro) == 0
 
 
@@ -353,9 +362,11 @@ def test_reserva_menos_de_15min_antes(datos_validos, registro):
     datos_validos["ahora"] = datetime(2026, 10, 20, 11, 50)
 
     # Act y Assert
-    with pytest.raises(ErrorInscripcion,
-                       match="Se debe reservar al menos 15 minutos antes"):
+    with pytest.raises(
+            ErrorInscripcion,
+            match="Se debe reservar al menos 15 minutos antes") as error:
         inscribir(**datos_validos)
+    assert error.value.campo == "horario"
     assert len(registro) == 0
 
 
