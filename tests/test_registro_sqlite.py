@@ -32,3 +32,17 @@ def test_registro_cuenta_inscripciones(tmp_path):
 
     # Assert
     assert len(registro) == 2
+
+
+def test_otra_instancia_ve_lo_guardado(tmp_path):
+    # Arrange: como si la app se reiniciara entre una y otra
+    ruta = tmp_path / "parque.db"
+    inscripcion = inscripcion_de_palestra()
+    RegistroSQLite(ruta).append(inscripcion)
+
+    # Act
+    otro_registro = RegistroSQLite(ruta)
+
+    # Assert
+    assert list(otro_registro) == [inscripcion]
+    assert len(otro_registro) == 1
