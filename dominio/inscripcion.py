@@ -80,6 +80,16 @@ def validar_reglas_de_actividad(visitante, actividad):
             f"La edad mínima para {actividad} es {edad_minima} años")
 
 
+def es_reservable(turno, ahora):
+    """True si el turno existe, el parque abre y está en la ventana."""
+    try:
+        validar_turno(turno)
+        validar_anticipacion(turno, ahora)
+    except ErrorInscripcion:
+        return False
+    return True
+
+
 def validar_cantidad(cantidad, visitantes):
     if cantidad < 1:
         raise ErrorInscripcion("Debe indicar al menos una persona")

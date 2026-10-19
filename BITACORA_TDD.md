@@ -51,6 +51,7 @@
 | 40 | Dígitos no ASCII en `test_dni_invalido` y `test_edad_invalida` | `isdigit()` acepta "²": el DNI "²²²²²²²" pasaba (`DID NOT RAISE`) y la edad "²" rompía con `ValueError` en `int()`. | DNI y edad exigen `isascii()` además de `isdigit()`, así solo valen los dígitos 0 a 9. | Ver fila R8. |
 | R8 | Refactor de dígitos ASCII | — | — | El chequeo repetido `isascii() and isdigit()` pasó a la función `es_numero(texto)`, usada por DNI y edad. 51 tests en verde. |
 | 41 | `test_seed_llena_el_proximo_turno_reservable_de_safari` | `crear_seed` era un stub que devolvía una lista vacía: `IndexError` al leer `registro[0]`. | `proximo_turno_reservable` prueba hora por hora (hasta 24 hs) reusando `validar_turno` y `validar_anticipacion`; `crear_seed` llena ese turno de Safari con `CUPOS["Safari"]` visitantes. | No hizo falta. |
+| R9 | Refactor: `es_reservable` a `inscripcion.py` | — | — | `es_reservable` pasó de `seed.py` a `inscripcion.py`, junto a `validar_turno` y `validar_anticipacion`, porque también la usa la vista de cupos. 52 tests en verde. |
 
 ## Supuestos
 

@@ -1,17 +1,7 @@
 from datetime import timedelta
 
-from dominio.inscripcion import (ErrorInscripcion, Inscripcion, Visitante,
-                                 validar_anticipacion, validar_turno)
+from dominio.inscripcion import Inscripcion, Visitante, es_reservable
 from dominio.reglas import ANTICIPACION_MAXIMA, CUPOS
-
-
-def es_reservable(turno, ahora):
-    try:
-        validar_turno(turno)
-        validar_anticipacion(turno, ahora)
-    except ErrorInscripcion:
-        return False
-    return True
 
 
 def proximo_turno_reservable(ahora):
