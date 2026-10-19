@@ -61,6 +61,7 @@
 | 48 | Campo en los errores de cada visitante (12 tests existentes y `test_error_de_visitante_indica_su_numero`, nuevo, con el error en el segundo visitante) | 29 casos pedían `nombre-N`, `dni-N`, `edad-N` o `talle-N` y recibían `None`. | `inscribir` recorre los visitantes con `enumerate` y pasa el `indice`; `validar_visitante`, `validar_reglas_de_actividad`, `validar_dnis_distintos` y `validar_superposicion` arman el campo con `f"dni-{indice}"`, etc. | No hizo falta. |
 | 49 | Error del mail sin campo (`test_falla_envio_mail_no_inscribe`) | No hubo Red: pasó de entrada, porque `campo` vale `None` por defecto. Fija que ese error se muestra como general, arriba del formulario. | No hizo falta código nuevo. | No hizo falta. |
 | R10 | Refactor: `validar_actividad` | — | — | Los dos chequeos de actividad salieron de `validar_seleccion` a `validar_actividad`, para que la web la use al pasar del primer paso al formulario. 61 tests en verde. |
+| R11 | Refactor: `validar_reserva` | — | — | Nace `validar_reserva(actividad, horario, cantidad, registro, ahora)`: selección, turno, anticipación, cantidad >= 1 y cupo, lo que se elige en la primera pantalla. `validar_cantidad` queda solo con "coincide con los visitantes". `inscribir` llama primero a `validar_reserva`, así que el cupo ahora se revisa antes que los visitantes; ningún test dependía del orden anterior. Sin tests nuevos: los existentes cubren cada chequeo. 61 tests en verde. |
 
 ## Supuestos
 

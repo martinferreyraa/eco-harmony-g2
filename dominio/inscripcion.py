@@ -143,9 +143,6 @@ def es_reservable(turno, ahora):
 
 
 def validar_cantidad(cantidad, visitantes):
-    if cantidad < 1:
-        raise ErrorInscripcion("Debe indicar al menos una persona",
-                               "cantidad")
     if cantidad != len(visitantes):
         raise ErrorInscripcion(
             "La cantidad de personas no coincide con los visitantes "
@@ -261,11 +258,24 @@ def armar_mail(numero_orden, actividad, horario, visitantes):
     return Mail(f"Inscripción confirmada: {actividad}", cuerpo, qrs)
 
 
-def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
-              registro, ahora, enviador):
+def validar_reserva(actividad, horario, cantidad, registro, ahora):
+    """Lo que se elige en la primera pantalla: actividad, turno y cantidad.
+
+    La web la usa al tocar Continuar; inscribir la vuelve a llamar al
+    confirmar, por si el cupo se llenó mientras se cargaban los datos.
+    """
     validar_seleccion(actividad, horario)
     validar_turno(horario)
     validar_anticipacion(horario, ahora)
+    if cantidad < 1:
+        raise ErrorInscripcion("Debe indicar al menos una persona",
+                               "cantidad")
+    validar_cupo(actividad, horario, cantidad, registro)
+
+
+def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
+              registro, ahora, enviador):
+    validar_reserva(actividad, horario, cantidad, registro, ahora)
     validar_cantidad(cantidad, visitantes)
     for indice, visitante in enumerate(visitantes):
         validar_visitante(visitante, indice)
@@ -275,7 +285,6 @@ def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
         raise ErrorInscripcion(
             "Debe aceptar los términos y condiciones de la actividad",
             "terminos")
-    validar_cupo(actividad, horario, cantidad, registro)
     validar_superposicion(horario, visitantes, registro)
     numero_orden = len(registro) + 1
     mail = armar_mail(numero_orden, actividad, horario, visitantes)
