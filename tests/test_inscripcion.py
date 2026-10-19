@@ -146,3 +146,14 @@ def test_talle_no_requerido_omitido(datos_validos, registro):
 
     # Assert
     assert len(registro) == 1
+
+
+def test_talle_invalido(datos_validos, registro):
+    # Arrange
+    datos_validos["actividad"] = "Palestra"
+    datos_validos["visitantes"][0].talle = "XXXL"
+
+    # Act y Assert
+    with pytest.raises(ErrorInscripcion, match="El talle debe ser uno de"):
+        inscribir(**datos_validos)
+    assert len(registro) == 0
