@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime
 
-from dominio.reglas import ACTIVIDADES, REQUIEREN_TALLE, TALLES
+from dominio.reglas import ACTIVIDADES, EDAD_MINIMA, REQUIEREN_TALLE, TALLES
 
 
 class ErrorInscripcion(Exception):
@@ -58,10 +58,10 @@ def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
         if actividad in REQUIEREN_TALLE and visitante.talle not in TALLES:
             raise ErrorInscripcion(
                 "El talle debe ser uno de: " + ", ".join(TALLES))
-        if actividad == "Palestra" and int(visitante.edad) < 12:
-            raise ErrorInscripcion("La edad mínima para Palestra es 12 años")
-        if actividad == "Tirolesa" and int(visitante.edad) < 8:
-            raise ErrorInscripcion("La edad mínima para Tirolesa es 8 años")
+        edad_minima = EDAD_MINIMA.get(actividad, 0)
+        if int(visitante.edad) < edad_minima:
+            raise ErrorInscripcion(
+                f"La edad mínima para {actividad} es {edad_minima} años")
     if not acepta_terminos:
         raise ErrorInscripcion(
             "Debe aceptar los términos y condiciones de la actividad")
