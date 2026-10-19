@@ -21,6 +21,7 @@
 | 16 | `test_edad_menor_minimo_tirolesa` | Un visitante de 7 años se inscribía en Tirolesa: `DID NOT RAISE ErrorInscripcion`. | Se copió la regla de Palestra para Tirolesa (`< 8`): mínimo para pasar, deja la duplicación a la vista. | Ver fila R2. |
 | R2 | Refactor edad mínima | — | — | Los dos `if` copiados se reemplazaron por el diccionario `EDAD_MINIMA` en `reglas.py`; las actividades sin límite usan 0 (`.get(actividad, 0)`). 23 tests en verde. |
 | 17 | `test_edad_igual_minimo_pasa` | No hubo Red: pasó de entrada, porque la regla usa `<` (12 no es menor que 12). Fija que el mínimo es inclusivo. | No hizo falta código nuevo. | No hizo falta. |
+| 18 | `test_safari_sin_limite_edad` | No hubo Red: pasó de entrada, porque Safari no está en `EDAD_MINIMA` y usa 0. | No hizo falta código nuevo. | Ver fila R3. |
 
 ## Supuestos
 

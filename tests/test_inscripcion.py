@@ -196,3 +196,14 @@ def test_edad_igual_minimo_pasa(datos_validos, registro):
 
     # Assert
     assert len(registro) == 1
+
+
+def test_safari_sin_limite_edad(datos_validos, registro):
+    # Arrange: Safari no tiene edad mínima
+    datos_validos["visitantes"][0].edad = "3"
+
+    # Act
+    inscribir(**datos_validos)
+
+    # Assert
+    assert len(registro) == 1
