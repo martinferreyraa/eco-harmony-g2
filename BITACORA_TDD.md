@@ -50,6 +50,7 @@
 | 39 | `test_dni_repetido_misma_inscripcion` | El mismo DNI cargado dos veces en el formulario se aceptaba: `DID NOT RAISE ErrorInscripcion`. | Nace `validar_dnis_distintos`: recorre los visitantes guardando los DNI ya vistos y lanza error si uno se repite. | No hizo falta. |
 | 40 | Dígitos no ASCII en `test_dni_invalido` y `test_edad_invalida` | `isdigit()` acepta "²": el DNI "²²²²²²²" pasaba (`DID NOT RAISE`) y la edad "²" rompía con `ValueError` en `int()`. | DNI y edad exigen `isascii()` además de `isdigit()`, así solo valen los dígitos 0 a 9. | Ver fila R8. |
 | R8 | Refactor de dígitos ASCII | — | — | El chequeo repetido `isascii() and isdigit()` pasó a la función `es_numero(texto)`, usada por DNI y edad. 51 tests en verde. |
+| 41 | `test_seed_llena_el_proximo_turno_reservable_de_safari` | `crear_seed` era un stub que devolvía una lista vacía: `IndexError` al leer `registro[0]`. | `proximo_turno_reservable` prueba hora por hora (hasta 24 hs) reusando `validar_turno` y `validar_anticipacion`; `crear_seed` llena ese turno de Safari con `CUPOS["Safari"]` visitantes. | No hizo falta. |
 
 ## Supuestos
 
@@ -67,3 +68,5 @@ Cosas que no estaban escritas en CLAUDE.md y se resolvieron con la opción más 
 - La superposición se controla por horario de inicio: como todos los turnos duran una hora y empiezan en punto, "mismo horario" es "mismo inicio". También bloquea el mismo DNI dos veces en la misma actividad y turno.
 - El resumen del mail lleva actividad, fecha y hora, cantidad de personas, número de orden y una línea por visitante con nombre, DNI, edad y talle (si tiene). El grupo eligió "Other" en esa pregunta pero no llegó el texto; se siguió el FAQ #18 (detalle de visitantes).
 - Solo se capturan errores `OSError` al enviar el mail (cubre los de red y los de `smtplib`, que heredan de `OSError`). Otros errores (un bug, por ejemplo) no se esconden.
+- Si no hay ningún turno reservable en las próximas 24 hs (por ejemplo, un domingo a la noche), `crear_seed` devuelve un registro vacío: la demo no muestra el caso "sin cupo", pero la app no se rompe.
+- El test del seed vive en `tests/test_seed.py`, separado de los de `inscribir`.
