@@ -101,6 +101,22 @@ tests/
 - **Número de orden:** `len(registro) + 1`, calculado antes del `append`. Aparece en el
   resumen del mail y en el texto de cada QR.
 
+## Flujo de pantallas
+
+1. **Inicio (`/`)**: actividad, fecha, hora y cantidad, en ese orden. El JS de días
+   cerrados avisa si se elige un lunes, el 25/12 o el 1/1 (lee los días de `reglas.py`).
+   **Continuar** (`GET /inscripcion`) llama a `validar_reserva` con el registro y
+   `datetime.now()`: los errores salen bajo actividad, hora o cantidad.
+2. **Formulario (`GET /inscripcion`)**: recibe actividad, fecha, hora y cantidad como
+   campos ocultos y muestra el turno como texto, con el link "cambiar turno o cantidad"
+   que vuelve al inicio con los valores cargados. Pide los datos de cada visitante y
+   la aceptación de los términos de la actividad.
+3. **Confirmar (`POST /inscripcion`)**: llama a `inscribir`, que revalida todo. Si falla
+   en actividad, horario o cantidad (por ejemplo, el cupo se llenó mientras tanto),
+   vuelve al inicio con el error bajo su campo; si falla en un visitante o en los
+   términos, vuelve al formulario. Si sale bien, muestra la confirmación.
+4. **Cupos (`/cupos`)**: tabla de horas x actividades para una fecha (FAQ #8).
+
 ## Reglas de negocio (fuente entre paréntesis)
 
 - Actividades: Tirolesa, Safari, Palestra, Jardinería (US).
