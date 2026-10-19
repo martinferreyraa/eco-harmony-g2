@@ -67,6 +67,7 @@
 | 52 | `test_registro_cuenta_inscripciones` | `TypeError: object of type 'RegistroSQLite' has no len()`: `inscribir` usa `len(registro)` para el número de orden. | `__len__` devuelve el largo de la lista interna. | No hizo falta. |
 | 53 | `test_otra_instancia_ve_lo_guardado` | La segunda instancia sobre el mismo archivo devolvió `[]`: la lista interna se pierde con el objeto (lo mismo que pasaría al reiniciar la app). | Aparece SQLite: `__init__` crea las tablas `inscripciones` y `visitantes` si no existen (y el archivo, si falta); `append` guarda la inscripción y sus visitantes en una sola transacción; `__iter__` y `__len__` leen del archivo. Una conexión por operación (Flask usa hilos). El horario se guarda en texto ISO. | Ver R12. |
 | R12 | Refactor: conexiones de `RegistroSQLite` | — | — | El patrón "abrir conexión, try, finally, cerrar" se repetía 4 veces: ahora es `conectar()`, que devuelve la conexión envuelta en `closing()` para usarla con `with`. La lectura de visitantes salió de `__iter__` a `leer_visitantes(conexion, numero)`. 64 tests en verde. |
+| R13 | Refactor: `crear_seed(registro, ahora)` | — | — | El seed ya no crea su propia lista: agrega sobre el registro que recibe (una lista en los tests, `RegistroSQLite` en la app). `test_seed.py` usa la fixture `registro` y `web/app.py` pasa una lista vacía por ahora. Mismo comportamiento, 64 tests en verde. |
 
 ## Supuestos
 

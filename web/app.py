@@ -23,7 +23,9 @@ CAMPOS_DE_LA_RESERVA = ["actividad", "horario", "cantidad"]
 
 def crear_registro():
     """Único lugar donde se crea el registro (por ahora, en memoria)."""
-    return crear_seed(datetime.now())
+    registro = []
+    crear_seed(registro, datetime.now())
+    return registro
 
 
 registro = crear_registro()
