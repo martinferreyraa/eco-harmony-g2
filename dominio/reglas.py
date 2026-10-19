@@ -6,3 +6,4 @@ CUPOS = {"Safari": 8, "Palestra": 12, "Jardinería": 12, "Tirolesa": 10}
 HORA_PRIMER_TURNO = 9
 HORA_ULTIMO_TURNO = 17
 LUNES = 0  # datetime.weekday() devuelve 0 para el lunes
+FERIADOS = [(25, 12), (1, 1)]  # (día, mes)
