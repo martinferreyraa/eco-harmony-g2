@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import pytest
 
 from dominio.inscripcion import (ErrorInscripcion, Inscripcion, Visitante,
@@ -281,3 +283,17 @@ def test_inscripcion_descuenta_cupo(datos_validos, registro):
 
     # Assert: Safari tiene 8 lugares y se ocupó 1
     assert cupo_disponible("Safari", horario, registro) == 7
+
+
+@pytest.mark.parametrize("horario", [datetime(2026, 10, 20, 8, 0),
+                                     datetime(2026, 10, 20, 18, 0),
+                                     datetime(2026, 10, 20, 12, 30)])
+def test_turno_fuera_de_rango(datos_validos, registro, horario):
+    # Arrange: los turnos empiezan en punto, de 9 a 17
+    datos_validos["horario"] = horario
+
+    # Act y Assert
+    with pytest.raises(ErrorInscripcion,
+                       match="El horario debe ser un turno en punto"):
+        inscribir(**datos_validos)
+    assert len(registro) == 0
