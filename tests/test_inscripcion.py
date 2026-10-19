@@ -470,3 +470,16 @@ def test_falla_envio_mail_no_inscribe(datos_validos, registro,
         inscribir(**datos_validos)
     assert len(registro) == 0
     assert cupo_disponible("Safari", horario, registro) == 8
+
+
+def test_dni_repetido_misma_inscripcion(datos_validos, registro):
+    # Arrange: el mismo DNI cargado dos veces en el formulario
+    datos_validos["cantidad"] = 2
+    datos_validos["visitantes"].append(
+        Visitante("Ana P.", "30123456", "25"))
+
+    # Act y Assert
+    with pytest.raises(ErrorInscripcion,
+                       match="El DNI 30123456 está repetido"):
+        inscribir(**datos_validos)
+    assert len(registro) == 0
