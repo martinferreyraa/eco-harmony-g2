@@ -27,6 +27,7 @@
 | 20 | `test_cantidad_no_coincide_con_visitantes` | Con cantidad 2 y un solo visitante cargado, se registraba igual: `DID NOT RAISE ErrorInscripcion`. | `inscribir` compara `cantidad` con `len(visitantes)` y lanza error si son distintos. | No hizo falta. |
 | 21 | `test_actividad_sin_cupo` | Con el turno de Safari lleno (8 de 8), se registraba igual: `DID NOT RAISE ErrorInscripcion`. | Nace `CUPOS` en `reglas.py`; `inscribir` suma las personas ya inscriptas en esa actividad y horario y lanza error si llegan al cupo. El test suma el helper `crear_visitantes`. | No hizo falta todavía. |
 | 22 | `test_cantidad_supera_cupo_disponible` | Con 2 lugares libres, una inscripción de 3 personas se registraba: `DID NOT RAISE ErrorInscripcion`. | `inscribir` calcula `disponibles = CUPOS - ocupados` y lanza error si la cantidad lo supera, informando cuántos quedan. | Ver fila R4. |
+| R4 | Refactor del cupo | — | — | El conteo pasó a `cupo_disponible(actividad, horario, registro)` y los dos chequeos a `validar_cupo`; `ocupados >= CUPOS` quedó como `disponibles <= 0`. 29 tests en verde. |
 
 ## Supuestos
 

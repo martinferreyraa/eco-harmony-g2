@@ -62,6 +62,25 @@ def validar_reglas_de_actividad(visitante, actividad):
             f"La edad mínima para {actividad} es {edad_minima} años")
 
 
+def cupo_disponible(actividad, horario, registro):
+    ocupados = 0
+    for anterior in registro:
+        if anterior.actividad == actividad and anterior.horario == horario:
+            ocupados += len(anterior.visitantes)
+    return CUPOS[actividad] - ocupados
+
+
+def validar_cupo(actividad, horario, cantidad, registro):
+    disponibles = cupo_disponible(actividad, horario, registro)
+    if disponibles <= 0:
+        raise ErrorInscripcion(
+            f"No hay cupo disponible para {actividad} en ese horario")
+    if cantidad > disponibles:
+        raise ErrorInscripcion(
+            f"Solo quedan {disponibles} lugares disponibles para "
+            f"{actividad} en ese horario")
+
+
 def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
               registro):
     validar_seleccion(actividad, horario)
@@ -77,17 +96,6 @@ def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
     if not acepta_terminos:
         raise ErrorInscripcion(
             "Debe aceptar los términos y condiciones de la actividad")
-    ocupados = 0
-    for anterior in registro:
-        if anterior.actividad == actividad and anterior.horario == horario:
-            ocupados += len(anterior.visitantes)
-    if ocupados >= CUPOS[actividad]:
-        raise ErrorInscripcion(
-            f"No hay cupo disponible para {actividad} en ese horario")
-    disponibles = CUPOS[actividad] - ocupados
-    if cantidad > disponibles:
-        raise ErrorInscripcion(
-            f"Solo quedan {disponibles} lugares disponibles para "
-            f"{actividad} en ese horario")
+    validar_cupo(actividad, horario, cantidad, registro)
     inscripcion = Inscripcion(actividad, horario, visitantes)
     registro.append(inscripcion)
