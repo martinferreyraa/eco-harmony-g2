@@ -160,6 +160,12 @@ def armar_cuerpo(numero_orden, actividad, horario, visitantes):
     return "\n".join(lineas)
 
 
+def texto_qr(numero_orden, visitante, actividad, horario):
+    return (f"Orden {numero_orden} | {visitante.nombre} | "
+            f"DNI {visitante.dni} | {actividad} | "
+            f"{horario:%d/%m/%Y %H:%M}")
+
+
 def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
               registro, ahora, enviador):
     validar_seleccion(actividad, horario)
@@ -176,7 +182,10 @@ def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
     validar_superposicion(horario, visitantes, registro)
     numero_orden = len(registro) + 1
     cuerpo = armar_cuerpo(numero_orden, actividad, horario, visitantes)
-    mail = Mail(f"Inscripción confirmada: {actividad}", cuerpo, [])
+    qrs = []
+    for visitante in visitantes:
+        qrs.append(texto_qr(numero_orden, visitante, actividad, horario))
+    mail = Mail(f"Inscripción confirmada: {actividad}", cuerpo, qrs)
     enviador.enviar(mail)
     inscripcion = Inscripcion(actividad, horario, visitantes)
     registro.append(inscripcion)
