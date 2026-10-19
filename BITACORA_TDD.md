@@ -36,6 +36,7 @@
 | 28 | `test_reserva_mas_de_24hs_antes` | Un turno 25 hs después de `ahora` se aceptaba: `DID NOT RAISE ErrorInscripcion`. | Nace `ANTICIPACION_MAXIMA = timedelta(hours=24)`; `inscribir` lanza error si `horario - ahora` la supera. | No hizo falta. |
 | 29 | `test_reserva_menos_de_15min_antes` | Reservar a las 11:50 un turno de las 12:00 se aceptaba: `DID NOT RAISE ErrorInscripcion`. | Nace `ANTICIPACION_MINIMA = timedelta(minutes=15)`; `inscribir` lanza error si falta menos que eso. | No hizo falta. |
 | 30 | `test_reserva_justo_24hs_antes_pasa` | No hubo Red: pasó de entrada, porque el ciclo 28 usa `>` (24 hs justas no superan el máximo). Fija que el límite es inclusivo. | No hizo falta código nuevo. | No hizo falta. |
+| 31 | `test_reserva_justo_15min_antes_pasa` | No hubo Red: pasó de entrada, porque el ciclo 29 usa `<` (15 min justos no son menos que el mínimo). Fija que el límite es inclusivo. | No hizo falta código nuevo. | Ver fila R5. |
 
 ## Supuestos
 

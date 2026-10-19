@@ -366,3 +366,14 @@ def test_reserva_justo_24hs_antes_pasa(datos_validos, registro):
 
     # Assert
     assert len(registro) == 1
+
+
+def test_reserva_justo_15min_antes_pasa(datos_validos, registro):
+    # Arrange: son las 11:45 y el turno es a las 12:00 (15 min justos)
+    datos_validos["ahora"] = datetime(2026, 10, 20, 11, 45)
+
+    # Act
+    inscribir(**datos_validos)
+
+    # Assert
+    assert len(registro) == 1
