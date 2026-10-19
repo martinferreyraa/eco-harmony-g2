@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 from datetime import datetime
 
-from dominio.reglas import ACTIVIDADES, EDAD_MINIMA, REQUIEREN_TALLE, TALLES
+from dominio.reglas import (ACTIVIDADES, CUPOS, EDAD_MINIMA,
+                            REQUIEREN_TALLE, TALLES)
 
 
 class ErrorInscripcion(Exception):
@@ -76,5 +77,12 @@ def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
     if not acepta_terminos:
         raise ErrorInscripcion(
             "Debe aceptar los términos y condiciones de la actividad")
+    ocupados = 0
+    for anterior in registro:
+        if anterior.actividad == actividad and anterior.horario == horario:
+            ocupados += len(anterior.visitantes)
+    if ocupados >= CUPOS[actividad]:
+        raise ErrorInscripcion(
+            f"No hay cupo disponible para {actividad} en ese horario")
     inscripcion = Inscripcion(actividad, horario, visitantes)
     registro.append(inscripcion)

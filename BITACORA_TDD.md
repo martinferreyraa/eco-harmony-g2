@@ -25,6 +25,7 @@
 | R3 | Refactor del grupo 4 (por actividad) | — | — | Talle y edad mínima pasaron a `validar_reglas_de_actividad`; el doble `actividad in REQUIEREN_TALLE` quedó en un solo `if`. 25 tests en verde. |
 | 19 | `test_cantidad_cero` | Una inscripción de 0 personas se registraba: `DID NOT RAISE ErrorInscripcion`. | `inscribir` lanza error si `cantidad` es menor que 1. | No hizo falta. |
 | 20 | `test_cantidad_no_coincide_con_visitantes` | Con cantidad 2 y un solo visitante cargado, se registraba igual: `DID NOT RAISE ErrorInscripcion`. | `inscribir` compara `cantidad` con `len(visitantes)` y lanza error si son distintos. | No hizo falta. |
+| 21 | `test_actividad_sin_cupo` | Con el turno de Safari lleno (8 de 8), se registraba igual: `DID NOT RAISE ErrorInscripcion`. | Nace `CUPOS` en `reglas.py`; `inscribir` suma las personas ya inscriptas en esa actividad y horario y lanza error si llegan al cupo. El test suma el helper `crear_visitantes`. | No hizo falta todavía. |
 
 ## Supuestos
 
@@ -38,3 +39,4 @@ Cosas que no estaban escritas en CLAUDE.md y se resolvieron con la opción más 
 - El talle se compara tal cual, en mayúsculas ("m" no es válido): en la GUI se elige de una lista, así que siempre llega bien escrito.
 - Un talle inválido enviado a una actividad que no requiere talle también se ignora (no se valida).
 - La cantidad de personas llega como número entero: en la GUI se elige de una lista desplegable y la web la convierte con `int(...)`.
+- El cupo no se guarda: se calcula como `CUPOS[actividad]` menos las personas ya inscriptas en ese turno (contadas en `registro`). "Descontar el cupo" es agregar la inscripción al registro.
