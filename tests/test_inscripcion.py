@@ -1,7 +1,7 @@
 import pytest
 
 from dominio.inscripcion import (ErrorInscripcion, Inscripcion, Visitante,
-                                 inscribir)
+                                 cupo_disponible, inscribir)
 
 
 def crear_visitantes(cantidad):
@@ -270,3 +270,14 @@ def test_cantidad_supera_cupo_disponible(datos_validos, registro):
                        match="Solo quedan 2 lugares disponibles"):
         inscribir(**datos_validos)
     assert len(registro) == 1
+
+
+def test_inscripcion_descuenta_cupo(datos_validos, registro):
+    # Arrange
+    horario = datos_validos["horario"]
+
+    # Act
+    inscribir(**datos_validos)
+
+    # Assert: Safari tiene 8 lugares y se ocupó 1
+    assert cupo_disponible("Safari", horario, registro) == 7
