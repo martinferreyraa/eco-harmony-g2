@@ -332,3 +332,14 @@ def test_turno_ya_pasado(datos_validos, registro):
                        match="El turno seleccionado ya pasó"):
         inscribir(**datos_validos)
     assert len(registro) == 0
+
+
+def test_reserva_mas_de_24hs_antes(datos_validos, registro):
+    # Arrange: son las 10:00 del martes y el turno es el miércoles a las 11
+    datos_validos["horario"] = datetime(2026, 10, 21, 11, 0)
+
+    # Act y Assert
+    with pytest.raises(ErrorInscripcion,
+                       match="Solo se puede reservar desde 24 hs antes"):
+        inscribir(**datos_validos)
+    assert len(registro) == 0
