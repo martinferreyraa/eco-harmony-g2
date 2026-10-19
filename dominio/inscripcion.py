@@ -2,6 +2,10 @@ from dataclasses import dataclass
 from datetime import datetime
 
 
+class ErrorInscripcion(Exception):
+    pass
+
+
 @dataclass
 class Visitante:
     nombre: str
