@@ -62,7 +62,7 @@ dominio/
   seed.py          # actividades y turnos iniciales
 servicios/
   mail.py          # EnviadorSMTP (real, lee credenciales de .env)
-  qr.py            # genera el QR de cada visitante
+  qr.py            # convierte el texto del QR en imagen (sin test)
 web/
   app.py           # Flask, capa delgada
   templates/
@@ -73,7 +73,7 @@ tests/
 .env.example       # SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, MAIL_USUARIO_MOCK
 ```
 
-`dominio/` nunca importa de `web/`. Los tests solo importan de `dominio/` y `servicios/qr.py`.
+`dominio/` nunca importa de `web/` ni de `servicios/`. Los tests solo importan de `dominio/`.
 Redactando preguntas de defensa y notas finales antes del mensaje.
 El plan está bien armado, y el DNI repetido ya figura como ciclo 9, que es lo que querías. Antes de aprobarlo encontré un bug y tres huecos.
 
@@ -149,8 +149,11 @@ Empezá: actualizá el CLAUDE.md, hacé el ciclo 0 y escribí
   (el CA dice que "se debe enviar" el correo al finalizar). Orden en `inscribir(...)`:
   validar todo → enviar el mail → recién después registrar la inscripción y descontar
   el cupo. Si el envío falla, se lanza un error y el cupo queda intacto.
-- **QR:** uno por visitante, adjunto al mail. Se testea QUÉ datos contiene, no la imagen
-  (la generación es responsabilidad de la librería `qrcode`).
+- **QR:** uno por visitante, adjunto al mail. `texto_qr` vive en `dominio/inscripcion.py`
+  y se testea QUÉ datos contiene, no la imagen. `servicios/qr.py` solo tiene `imagen_qr`
+  (lo único que usa la librería `qrcode`), sin test: se verifica a mano en la demo.
+- **Número de orden:** `len(registro) + 1`, calculado antes del `append`. Aparece en el
+  resumen del mail y en el texto de cada QR.
 
 ## Reglas de negocio (fuente entre paréntesis)
 
@@ -172,7 +175,10 @@ Empezá: actualizá el CLAUDE.md, hacé el ciclo 0 y escribí
 - Sin máximo de personas por inscripción: el único límite es el cupo (FAQ #31).
 - Un mismo DNI no puede estar inscripto en dos actividades en el mismo horario (FAQ #29).
 - Hay que aceptar los términos y condiciones específicos de la actividad (US, FAQ #16).
-- Mail de confirmación con el resumen de la inscripción y los QR (TP6, FAQ #28).
+- Mail de confirmación con número de orden, detalle de visitantes y un QR por visitante
+  (TP6, FAQ #18 y #28). Los subtotales y el total del FAQ #18 no aplican: ninguna fuente
+  le pone precio a las actividades.
+  El QR de cada visitante lleva nombre, DNI, actividad, fecha y hora, y número de orden.
 
 ## Lista de tests (orden sugerido de ciclos)
 
@@ -196,7 +202,8 @@ Empezá: actualizá el CLAUDE.md, hacé el ciclo 0 y escribí
 7. Superposición: `test_dni_inscripto_mismo_horario`
 8. Mail y QR: `test_envia_mail_al_confirmar`,
    `test_no_envia_mail_si_validacion_falla`,
-   `test_mail_incluye_resumen`, `test_mail_incluye_qr_por_visitante`,
+   `test_mail_incluye_resumen`, `test_mail_incluye_numero_de_orden`,
+   `test_mail_incluye_qr_por_visitante`,
    `test_falla_envio_mail_no_inscribe` (no se registra y el cupo no se descuenta)
 9. DNI repetido en la misma inscripción (decisión del grupo):
    `test_dni_repetido_misma_inscripcion`
