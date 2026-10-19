@@ -20,3 +20,15 @@ def test_registro_guarda_y_lee_una_inscripcion(tmp_path):
 
     # Assert: vuelve igual, con la fecha y el talle de cada visitante
     assert list(registro) == [inscripcion]
+
+
+def test_registro_cuenta_inscripciones(tmp_path):
+    # Arrange
+    registro = RegistroSQLite(tmp_path / "parque.db")
+
+    # Act
+    registro.append(inscripcion_de_palestra())
+    registro.append(inscripcion_de_palestra())
+
+    # Assert
+    assert len(registro) == 2
