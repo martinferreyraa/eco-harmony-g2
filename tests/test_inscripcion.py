@@ -354,3 +354,15 @@ def test_reserva_menos_de_15min_antes(datos_validos, registro):
                        match="Se debe reservar al menos 15 minutos antes"):
         inscribir(**datos_validos)
     assert len(registro) == 0
+
+
+def test_reserva_justo_24hs_antes_pasa(datos_validos, registro):
+    # Arrange: martes 12:00 y el turno es el miércoles 12:00 (24 hs justas)
+    datos_validos["ahora"] = datetime(2026, 10, 20, 12, 0)
+    datos_validos["horario"] = datetime(2026, 10, 21, 12, 0)
+
+    # Act
+    inscribir(**datos_validos)
+
+    # Assert
+    assert len(registro) == 1
