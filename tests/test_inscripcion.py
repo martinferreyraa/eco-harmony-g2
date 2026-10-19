@@ -113,3 +113,14 @@ def test_edad_invalida(datos_validos, registro, edad):
                        match="La edad debe ser un número entero"):
         inscribir(**datos_validos)
     assert len(registro) == 0
+
+
+def test_edad_cero_valida(datos_validos, registro):
+    # Arrange: un bebé puede ir al Safari
+    datos_validos["visitantes"][0].edad = "0"
+
+    # Act
+    inscribir(**datos_validos)
+
+    # Assert
+    assert len(registro) == 1

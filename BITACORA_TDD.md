@@ -13,3 +13,14 @@
 | R1 | Refactor del grupo 2 (presencia) | — | — | Se extrajeron `validar_seleccion` (actividad y horario) y `validar_visitante` (nombre, DNI, edad); `inscribir` queda como una lista de pasos. 8 tests en verde. |
 | 9 | `test_dni_invalido` (5 casos) | Los 5 DNI mal escritos (con puntos, cortos, largos, con letra, con espacios) se aceptaban: 5 `DID NOT RAISE`. | `validar_visitante` exige que el DNI sea solo dígitos y tenga 7 u 8 caracteres. | No hizo falta. |
 | 10 | `test_edad_invalida` (4 casos) | "abc", "-1", "2.5" y "121" se aceptaban como edad: 4 `DID NOT RAISE`. | `validar_visitante` exige que la edad sea solo dígitos (descarta negativos y decimales) y no supere 120. | No hizo falta. |
+| 11 | `test_edad_cero_valida` | No hubo Red: pasó de entrada, porque "0" ya cumplía la regla del ciclo 10. Se deja para fijar la decisión de que 0 es válido. | No hizo falta código nuevo. | No hizo falta. |
+
+## Supuestos
+
+Cosas que no estaban escritas en CLAUDE.md y se resolvieron con la opción más simple.
+
+- "No seleccionar actividad" llega como texto vacío `""` (lo que manda un `<select>` sin elegir).
+- "No seleccionar horario" llega como `None`: el dominio recibe el horario como `datetime` y la web pasa `None` si falta.
+- Los mensajes de error los redactamos nosotros, siguiendo el texto de los criterios de aceptación.
+- Los datos de cada visitante llegan como texto (como vienen del formulario) y el dominio valida su formato.
+- Si hay más de un error, se informa solo el primero que se encuentra.
