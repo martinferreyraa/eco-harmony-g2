@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from datetime import datetime
 
 from dominio.reglas import (ACTIVIDADES, CUPOS, EDAD_MINIMA,
+                            HORA_PRIMER_TURNO, HORA_ULTIMO_TURNO,
                             REQUIEREN_TALLE, TALLES)
 
 
@@ -84,6 +85,12 @@ def validar_cupo(actividad, horario, cantidad, registro):
 def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
               registro):
     validar_seleccion(actividad, horario)
+    es_turno_en_punto = horario.minute == 0
+    esta_en_rango = HORA_PRIMER_TURNO <= horario.hour <= HORA_ULTIMO_TURNO
+    if not es_turno_en_punto or not esta_en_rango:
+        raise ErrorInscripcion(
+            "El horario debe ser un turno en punto entre las "
+            f"{HORA_PRIMER_TURNO} y las {HORA_ULTIMO_TURNO} hs")
     if cantidad < 1:
         raise ErrorInscripcion("Debe indicar al menos una persona")
     if cantidad != len(visitantes):

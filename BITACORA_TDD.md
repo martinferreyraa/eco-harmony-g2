@@ -29,6 +29,7 @@
 | 22 | `test_cantidad_supera_cupo_disponible` | Con 2 lugares libres, una inscripción de 3 personas se registraba: `DID NOT RAISE ErrorInscripcion`. | `inscribir` calcula `disponibles = CUPOS - ocupados` y lanza error si la cantidad lo supera, informando cuántos quedan. | Ver fila R4. |
 | R4 | Refactor del cupo | — | — | El conteo pasó a `cupo_disponible(actividad, horario, registro)` y los dos chequeos a `validar_cupo`; `ocupados >= CUPOS` quedó como `disponibles <= 0`. 29 tests en verde. |
 | 23 | `test_inscripcion_descuenta_cupo` | No hubo Red: pasó de entrada, porque el refactor R4 ya había creado `cupo_disponible` y el cupo se calcula desde el registro. | No hizo falta código nuevo. | No hizo falta. |
+| 24 | `test_turno_fuera_de_rango` (3 casos) | Los turnos de las 8:00, 18:00 y 12:30 se aceptaban: 3 `DID NOT RAISE`. | Nacen `HORA_PRIMER_TURNO` y `HORA_ULTIMO_TURNO`; `inscribir` exige un turno en punto entre las 9 y las 17. | No hizo falta (se espera al resto del grupo). |
 
 ## Supuestos
 
