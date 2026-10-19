@@ -12,3 +12,4 @@
 | 8 | `test_actividad_inexistente` | "Buceo" se registraba como si existiera: `DID NOT RAISE ErrorInscripcion`. | Nació `reglas.py` con `ACTIVIDADES`; `inscribir` lanza error si la actividad no está en esa lista. | Al cerrar el grupo de presencia: ver fila siguiente. |
 | R1 | Refactor del grupo 2 (presencia) | — | — | Se extrajeron `validar_seleccion` (actividad y horario) y `validar_visitante` (nombre, DNI, edad); `inscribir` queda como una lista de pasos. 8 tests en verde. |
 | 9 | `test_dni_invalido` (5 casos) | Los 5 DNI mal escritos (con puntos, cortos, largos, con letra, con espacios) se aceptaban: 5 `DID NOT RAISE`. | `validar_visitante` exige que el DNI sea solo dígitos y tenga 7 u 8 caracteres. | No hizo falta. |
+| 10 | `test_edad_invalida` (4 casos) | "abc", "-1", "2.5" y "121" se aceptaban como edad: 4 `DID NOT RAISE`. | `validar_visitante` exige que la edad sea solo dígitos (descarta negativos y decimales) y no supere 120. | No hizo falta. |

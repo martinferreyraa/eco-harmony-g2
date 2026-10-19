@@ -41,6 +41,9 @@ def validar_visitante(visitante):
             "El DNI debe tener 7 u 8 dígitos, sin puntos ni espacios")
     if not visitante.edad:
         raise ErrorInscripcion("Debe ingresar la edad de cada visitante")
+    if not visitante.edad.isdigit() or int(visitante.edad) > 120:
+        raise ErrorInscripcion(
+            "La edad debe ser un número entero entre 0 y 120")
 
 
 def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
