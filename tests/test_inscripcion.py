@@ -456,3 +456,17 @@ def test_mail_incluye_qr_por_visitante(datos_validos, enviador):
         "Orden 1 | Ana Pérez | DNI 30123456 | Safari | 20/10/2026 12:00",
         "Orden 1 | Luis Gómez | DNI 31234567 | Safari | 20/10/2026 12:00",
     ]
+
+
+def test_falla_envio_mail_no_inscribe(datos_validos, registro,
+                                      enviador_que_falla):
+    # Arrange: el servidor de mail está caído
+    datos_validos["enviador"] = enviador_que_falla
+    horario = datos_validos["horario"]
+
+    # Act y Assert
+    with pytest.raises(ErrorInscripcion,
+                       match="No se pudo enviar el mail de confirmación"):
+        inscribir(**datos_validos)
+    assert len(registro) == 0
+    assert cupo_disponible("Safari", horario, registro) == 8

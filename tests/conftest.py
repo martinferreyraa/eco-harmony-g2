@@ -15,9 +15,21 @@ class EnviadorFalso:
         self.enviados.append(mail)
 
 
+class EnviadorQueFalla:
+    """Simula que el servidor de mail no responde."""
+
+    def enviar(self, mail):
+        raise ConnectionError("El servidor de mail no responde")
+
+
 @pytest.fixture
 def enviador():
     return EnviadorFalso()
+
+
+@pytest.fixture
+def enviador_que_falla():
+    return EnviadorQueFalla()
 
 
 @pytest.fixture
