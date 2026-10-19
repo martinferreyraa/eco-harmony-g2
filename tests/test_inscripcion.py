@@ -219,3 +219,14 @@ def test_cantidad_cero(datos_validos, registro):
                        match="Debe indicar al menos una persona"):
         inscribir(**datos_validos)
     assert len(registro) == 0
+
+
+def test_cantidad_no_coincide_con_visitantes(datos_validos, registro):
+    # Arrange: dice 2 personas pero cargó los datos de 1
+    datos_validos["cantidad"] = 2
+
+    # Act y Assert
+    with pytest.raises(ErrorInscripcion,
+                       match="La cantidad de personas no coincide"):
+        inscribir(**datos_validos)
+    assert len(registro) == 0
