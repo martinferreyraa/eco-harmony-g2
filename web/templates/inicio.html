@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block titulo %}Inscribirme a una actividad · EcoHarmony Park{% endblock %}
+{% block contenido %}
+<section class="tarjeta">
+  <h1>Inscribirme a una actividad</h1>
+  <p class="ayuda">Elegí la actividad y cuántas personas van a participar.
+    En el siguiente paso cargás el turno y los datos de cada visitante.</p>
+
+  <form method="get" action="{{ url_for('formulario') }}" class="formulario">
+    <label for="actividad">Actividad</label>
+    <select id="actividad" name="actividad">
+      <option value="">Elegí una actividad</option>
+      {% for actividad in actividades %}
+      <option value="{{ actividad }}">{{ actividad }}</option>
+      {% endfor %}
+    </select>
+
+    <label for="cantidad">Cantidad de personas</label>
+    <select id="cantidad" name="cantidad">
+      {% for numero in range(1, maximo_personas + 1) %}
+      <option value="{{ numero }}">{{ numero }}</option>
+      {% endfor %}
+    </select>
+
+    <button type="submit" class="boton">Continuar</button>
+  </form>
+
+  <p class="ayuda"><a href="{{ url_for('cupos') }}">Ver los cupos disponibles por turno</a></p>
+</section>
+{% endblock %}

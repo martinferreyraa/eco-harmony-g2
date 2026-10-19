@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block titulo %}Inscripción confirmada · EcoHarmony Park{% endblock %}
+{% block contenido %}
+<section class="tarjeta">
+  <h1>¡Inscripción confirmada!</h1>
+  <p class="exito">Te enviamos un mail con el número de orden y un código QR
+    para cada visitante. Presentalo en la entrada de la actividad.</p>
+
+  <dl class="resumen">
+    <dt>Actividad</dt>
+    <dd>{{ actividad }}</dd>
+    <dt>Fecha y hora</dt>
+    <dd>{{ horario.strftime("%d/%m/%Y %H:%M") }} hs</dd>
+    <dt>Visitantes</dt>
+    <dd>
+      <ul>
+        {% for visitante in visitantes %}
+        <li>{{ visitante.nombre }} · DNI {{ visitante.dni }}{% if visitante.talle %} · talle {{ visitante.talle }}{% endif %}</li>
+        {% endfor %}
+      </ul>
+    </dd>
+  </dl>
+
+  <a class="boton" href="{{ url_for('inicio') }}">Hacer otra inscripción</a>
+</section>
+{% endblock %}

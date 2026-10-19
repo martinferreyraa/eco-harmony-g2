@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block titulo %}Inscripción a {{ actividad }} · EcoHarmony Park{% endblock %}
+{% block contenido %}
+<section class="tarjeta">
+  <h1>Inscripción a {{ actividad or "una actividad" }}</h1>
+  <p class="ayuda">{{ cantidad }} persona{{ "s" if cantidad != 1 }} ·
+    <a href="{{ url_for('inicio') }}">cambiar actividad o cantidad</a></p>
+
+  {% if error %}
+  <p class="error" role="alert">{{ error }}</p>
+  {% endif %}
+
+  <form method="post" action="{{ url_for('confirmar') }}" class="formulario">
+    <input type="hidden" name="actividad" value="{{ actividad }}">
+    <input type="hidden" name="cantidad" value="{{ cantidad }}">
+
+    <fieldset>
+      <legend>Turno</legend>
+      <label for="fecha">Fecha</label>
+      <input type="date" id="fecha" name="fecha" data-dias-cerrados
+             min="{{ fecha_minima }}" max="{{ fecha_maxima }}"
+             value="{{ valores.get('fecha', '') }}">
+      <p class="aviso" data-aviso-fecha hidden></p>
+
+      <label for="hora">Hora</label>
+      <select id="hora" name="hora">
+        <option value="">Elegí un horario</option>
+        {% for hora in horas %}
+        <option value="{{ hora }}" {{ "selected" if valores.get('hora') == hora|string }}>{{ "%02d"|format(hora) }}:00</option>
+        {% endfor %}
+      </select>
+    </fieldset>
+
+    {% set nombres = valores.getlist('nombre') %}
+    {% set dnis = valores.getlist('dni') %}
+    {% set edades = valores.getlist('edad') %}
+    {% set talles_elegidos = valores.getlist('talle') %}
+    {% for i in range(cantidad) %}
+    <fieldset>
+      <legend>Visitante {{ i + 1 }}</legend>
+      <label for="nombre-{{ i }}">Nombre y apellido</label>
+      <input type="text" id="nombre-{{ i }}" name="nombre" value="{{ nombres[i] }}">
+
+      <div class="fila">
+        <div>
+          <label for="dni-{{ i }}">DNI</label>
+          <input type="text" id="dni-{{ i }}" name="dni" inputmode="numeric"
+                 placeholder="Sin puntos" value="{{ dnis[i] }}">
+        </div>
+        <div>
+          <label for="edad-{{ i }}">Edad</label>
+          <input type="text" id="edad-{{ i }}" name="edad" inputmode="numeric"
+                 value="{{ edades[i] }}">
+        </div>
+      </div>
+
+      {% if requiere_talle %}
+      <label for="talle-{{ i }}">Talle de vestimenta</label>
+      <select id="talle-{{ i }}" name="talle">
+        <option value="">Elegí un talle</option>
+        {% for talle in talles %}
+        <option value="{{ talle }}" {{ "selected" if talles_elegidos[i] == talle }}>{{ talle }}</option>
+        {% endfor %}
+      </select>
+      {% else %}
+      <input type="hidden" name="talle" value="">
+      {% endif %}
+    </fieldset>
+    {% endfor %}
+
+    <fieldset>
+      <legend>Términos y condiciones</legend>
+      <p class="terminos">{{ terminos }}</p>
+      <label class="check">
+        <input type="checkbox" name="acepta_terminos" value="si"
+               {{ "checked" if valores.get('acepta_terminos') }}>
+        Leí y acepto los términos y condiciones de {{ actividad }}
+      </label>
+    </fieldset>
+
+    <button type="submit" class="boton">Confirmar inscripción</button>
+  </form>
+</section>
+{% endblock %}
+{% block scripts %}
+<script id="dias-cerrados" type="application/json">{{ dias_cerrados | tojson }}</script>
+<script src="{{ url_for('static', filename='dias_cerrados.js') }}"></script>
+{% endblock %}

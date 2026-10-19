@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block titulo %}Cupos disponibles · EcoHarmony Park{% endblock %}
+{% block contenido %}
+<section class="tarjeta">
+  <h1>Cupos disponibles</h1>
+
+  <form method="get" action="{{ url_for('cupos') }}" class="formulario en-linea">
+    <label for="fecha">Fecha</label>
+    <input type="date" id="fecha" name="fecha" value="{{ fecha }}" data-dias-cerrados>
+    <button type="submit" class="boton">Ver</button>
+  </form>
+  <p class="aviso" data-aviso-fecha hidden></p>
+
+  <div class="tabla-contenedor">
+    <table class="tabla-cupos">
+      <thead>
+        <tr>
+          <th scope="col">Hora</th>
+          {% for actividad in actividades %}
+          <th scope="col">{{ actividad }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for fila in filas %}
+        <tr>
+          <th scope="row">{{ fila.hora }}</th>
+          {% for lugares in fila.lugares %}
+          {% if lugares is none %}
+          <td class="no-disponible">—</td>
+          {% elif lugares == 0 %}
+          <td class="completo">Completo</td>
+          {% else %}
+          <td>{{ lugares }}</td>
+          {% endif %}
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <p class="ayuda">Los números son los lugares libres. "—" indica un turno que
+    no se puede reservar: ya pasó, falta menos de 15 minutos, está a más de
+    24 hs o el parque está cerrado.</p>
+</section>
+{% endblock %}
+{% block scripts %}
+<script id="dias-cerrados" type="application/json">{{ dias_cerrados | tojson }}</script>
+<script src="{{ url_for('static', filename='dias_cerrados.js') }}"></script>
+{% endblock %}

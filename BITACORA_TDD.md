@@ -74,3 +74,8 @@ Cosas que no estaban escritas en CLAUDE.md y se resolvieron con la opción más 
 - Los textos de `TERMINOS` los redactamos nosotros (FAQ #16) y quedan a revisión del grupo y de los PO; no tienen test porque son contenido, no comportamiento.
 - `EnviadorSMTP` revisa al crearse que estén las 5 variables del `.env` y, si falta alguna, corta con un mensaje claro ("Falta configurar ... en .env"). Es configuración, no una regla de negocio, por eso no está en el dominio.
 - `imagen_qr` y `EnviadorSMTP` no tienen tests automáticos: se verificaron a mano (la imagen es un PNG válido y el mensaje lleva asunto, destinatario y un adjunto por visitante). El envío real se prueba con un `.env` real en la demo.
+- Flujo de la GUI en dos pasos, sin JS: primero actividad y cantidad (GET), después el formulario con N bloques de visitante, el talle solo si la actividad lo requiere y los términos de esa actividad. La cantidad se elige de 1 a 12 (el cupo más grande).
+- Los campos del formulario no usan `required` ni validaciones de HTML: así todos los errores los da el dominio, con sus mensajes. La web solo convierte textos (`a_entero`, `armar_horario`); si no puede convertir, pasa 0 o `None` y el dominio rechaza.
+- Días cerrados (FAQ #2): el calendario nativo del navegador no permite deshabilitar días sueltos, así que el JS muestra un aviso y bloquea el envío si se elige un lunes, el 25/12 o el 1/1. El campo fecha limita a hoy y mañana (`min`/`max`) como ayuda visual.
+- Vista de cupos (FAQ #8): tabla de horas x actividades para una fecha, con `cupo_disponible`; los turnos que no se pueden reservar (`es_reservable` falso) muestran "—".
+- La inscripción de ejemplo del seed ocupa el número de orden 1, así que la primera inscripción real de la demo recibe el 2.

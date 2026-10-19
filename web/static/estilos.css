@@ -1,0 +1,281 @@
+/* Paleta de EcoHarmony Park (FAQ #3) */
+:root {
+  --verde-oscuro: #386641;
+  --verde: #6A994E;
+  --verde-claro: #A7C957;
+  --crema: #F2E8CF;
+  --rojo: #BC4749;
+  --texto: #1f2a1f;
+  --blanco: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Lato", Arial, sans-serif;
+  color: var(--texto);
+  background: var(--crema);
+  line-height: 1.5;
+}
+
+a {
+  color: var(--verde-oscuro);
+}
+
+/* Encabezado y pie */
+.encabezado {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 24px;
+  padding: 16px 24px;
+  background: var(--verde-oscuro);
+}
+
+.marca {
+  color: var(--blanco);
+  font-size: 1.3rem;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.menu {
+  display: flex;
+  gap: 20px;
+}
+
+.menu a {
+  color: var(--crema);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.menu a:hover {
+  color: var(--verde-claro);
+}
+
+.pie {
+  padding: 24px 16px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--verde-oscuro);
+}
+
+/* Contenido */
+.contenido {
+  max-width: 760px;
+  margin: 32px auto;
+  padding: 0 16px;
+}
+
+.tarjeta {
+  padding: 28px;
+  background: var(--blanco);
+  border-top: 6px solid var(--verde-claro);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(56, 102, 65, 0.12);
+}
+
+h1 {
+  margin: 0 0 8px;
+  color: var(--verde-oscuro);
+  font-weight: 900;
+}
+
+.ayuda {
+  color: #4a5a4a;
+}
+
+/* Formularios */
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+fieldset {
+  margin: 8px 0;
+  padding: 16px;
+  border: 1px solid var(--verde-claro);
+  border-radius: 8px;
+}
+
+legend {
+  padding: 0 8px;
+  color: var(--verde-oscuro);
+  font-weight: 700;
+}
+
+label {
+  display: block;
+  margin-top: 8px;
+  font-weight: 700;
+}
+
+input[type="text"],
+input[type="date"],
+select {
+  width: 100%;
+  margin-top: 4px;
+  padding: 10px 12px;
+  font: inherit;
+  border: 1px solid #b9c4b0;
+  border-radius: 6px;
+  background: var(--blanco);
+}
+
+input:focus,
+select:focus {
+  outline: 3px solid var(--verde-claro);
+  border-color: var(--verde);
+}
+
+.fila {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.check {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-weight: 400;
+}
+
+.check input {
+  margin-top: 5px;
+}
+
+.terminos {
+  margin: 0;
+  padding: 12px;
+  background: var(--crema);
+  border-radius: 6px;
+}
+
+.boton {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 12px 24px;
+  font: inherit;
+  font-weight: 700;
+  color: var(--blanco);
+  background: var(--verde);
+  border: none;
+  border-radius: 6px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.boton:hover {
+  background: var(--verde-oscuro);
+}
+
+.en-linea {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.en-linea input {
+  width: auto;
+}
+
+.en-linea .boton {
+  margin-top: 0;
+}
+
+/* Mensajes */
+.error,
+.aviso {
+  padding: 12px 16px;
+  color: var(--blanco);
+  background: var(--rojo);
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+.aviso {
+  margin: 4px 0;
+}
+
+.exito {
+  padding: 12px 16px;
+  background: var(--verde-claro);
+  border-radius: 6px;
+}
+
+/* Confirmación */
+.resumen dt {
+  margin-top: 12px;
+  font-weight: 700;
+  color: var(--verde-oscuro);
+}
+
+.resumen dd {
+  margin: 0;
+}
+
+.resumen ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+/* Tabla de cupos */
+.tabla-contenedor {
+  margin-top: 16px;
+  overflow-x: auto;
+}
+
+.tabla-cupos {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+.tabla-cupos th,
+.tabla-cupos td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #e3dcc6;
+}
+
+.tabla-cupos thead th {
+  color: var(--blanco);
+  background: var(--verde-oscuro);
+}
+
+.tabla-cupos .completo {
+  color: var(--rojo);
+  font-weight: 700;
+}
+
+.tabla-cupos .no-disponible {
+  color: #9aa39a;
+}
+
+/* Celular */
+@media (max-width: 560px) {
+  .contenido {
+    margin: 16px auto;
+  }
+
+  .tarjeta {
+    padding: 20px 16px;
+  }
+
+  .fila {
+    grid-template-columns: 1fr;
+  }
+
+  .boton {
+    width: 100%;
+  }
+}
