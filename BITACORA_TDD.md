@@ -52,6 +52,7 @@
 | R8 | Refactor de dígitos ASCII | — | — | El chequeo repetido `isascii() and isdigit()` pasó a la función `es_numero(texto)`, usada por DNI y edad. 51 tests en verde. |
 | 41 | `test_seed_llena_el_proximo_turno_reservable_de_safari` | `crear_seed` era un stub que devolvía una lista vacía: `IndexError` al leer `registro[0]`. | `proximo_turno_reservable` prueba hora por hora (hasta 24 hs) reusando `validar_turno` y `validar_anticipacion`; `crear_seed` llena ese turno de Safari con `CUPOS["Safari"]` visitantes. | No hizo falta. |
 | R9 | Refactor: `es_reservable` a `inscripcion.py` | — | — | `es_reservable` pasó de `seed.py` a `inscripcion.py`, junto a `validar_turno` y `validar_anticipacion`, porque también la usa la vista de cupos. 52 tests en verde. |
+| 42 | `test_nombre_invalido` (6 casos) | Una sola palabra, números, símbolos, punto, una letra por palabra y solo espacios se aceptaban: 6 `DID NOT RAISE`. Se cambió "Ana P." del test de DNI repetido por un nombre completo. | Nacen `es_palabra_de_nombre` (empieza y termina con letra, adentro solo letras, apóstrofo o guion, al menos 2 letras) y `es_nombre_completo` (al menos 2 palabras válidas). | No hizo falta. |
 
 ## Supuestos
 
@@ -79,3 +80,4 @@ Cosas que no estaban escritas en CLAUDE.md y se resolvieron con la opción más 
 - Días cerrados (FAQ #2): el calendario nativo del navegador no permite deshabilitar días sueltos, así que el JS muestra un aviso y bloquea el envío si se elige un lunes, el 25/12 o el 1/1. El campo fecha limita a hoy y mañana (`min`/`max`) como ayuda visual.
 - Vista de cupos (FAQ #8): tabla de horas x actividades para una fecha, con `cupo_disponible`; los turnos que no se pueden reservar (`es_reservable` falso) muestran "—".
 - La inscripción de ejemplo del seed ocupa el número de orden 1, así que la primera inscripción real de la demo recibe el 2.
+- Nombre: `isalpha()` acepta letras de cualquier alfabeto (también "ç" u "ö"), no solo las del español. Como cada palabra necesita al menos 2 letras, un nombre como "Ortega y Gasset" se rechaza por la "y"; es consecuencia de la regla elegida.

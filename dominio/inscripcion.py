@@ -51,9 +51,35 @@ def es_numero(texto):
     return texto.isascii() and texto.isdigit()
 
 
+def es_palabra_de_nombre(palabra):
+    # Empieza y termina con letra; adentro puede tener apóstrofo o guion
+    if not palabra[0].isalpha() or not palabra[-1].isalpha():
+        return False
+    letras = 0
+    for caracter in palabra:
+        if caracter.isalpha():
+            letras += 1
+        elif caracter not in "'-":
+            return False
+    return letras >= 2
+
+
+def es_nombre_completo(nombre):
+    palabras = nombre.split()
+    if len(palabras) < 2:
+        return False
+    for palabra in palabras:
+        if not es_palabra_de_nombre(palabra):
+            return False
+    return True
+
+
 def validar_visitante(visitante):
     if not visitante.nombre:
         raise ErrorInscripcion("Debe ingresar el nombre de cada visitante")
+    if not es_nombre_completo(visitante.nombre):
+        raise ErrorInscripcion(
+            "Ingresá el nombre completo (nombre y apellido), solo con letras")
     if not visitante.dni:
         raise ErrorInscripcion("Debe ingresar el DNI de cada visitante")
     if not es_numero(visitante.dni) or len(visitante.dni) not in (7, 8):
