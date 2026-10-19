@@ -136,7 +136,7 @@ def validar_superposicion(horario, visitantes, registro):
 
 
 def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
-              registro, ahora):
+              registro, ahora, enviador):
     validar_seleccion(actividad, horario)
     validar_turno(horario)
     validar_anticipacion(horario, ahora)

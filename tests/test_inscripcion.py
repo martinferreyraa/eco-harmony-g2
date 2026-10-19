@@ -389,3 +389,11 @@ def test_dni_inscripto_mismo_horario(datos_validos, registro):
                        match="El DNI 30123456 ya tiene una inscripción"):
         inscribir(**datos_validos)
     assert len(registro) == 1
+
+
+def test_envia_mail_al_confirmar(datos_validos, enviador):
+    # Act
+    inscribir(**datos_validos)
+
+    # Assert
+    assert len(enviador.enviados) == 1

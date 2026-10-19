@@ -5,6 +5,21 @@ import pytest
 from dominio.inscripcion import Visitante
 
 
+class EnviadorFalso:
+    """Reemplaza al SMTP en los tests: guarda los mails en vez de enviarlos."""
+
+    def __init__(self):
+        self.enviados = []
+
+    def enviar(self, mail):
+        self.enviados.append(mail)
+
+
+@pytest.fixture
+def enviador():
+    return EnviadorFalso()
+
+
 @pytest.fixture
 def registro():
     return []
@@ -17,7 +32,7 @@ def ahora():
 
 
 @pytest.fixture
-def datos_validos(registro, ahora):
+def datos_validos(registro, ahora, enviador):
     # Safari a las 12:00 del mismo día: 2 hs antes, dentro de la ventana
     return {
         "actividad": "Safari",
@@ -27,4 +42,5 @@ def datos_validos(registro, ahora):
         "acepta_terminos": True,
         "registro": registro,
         "ahora": ahora,
+        "enviador": enviador,
     }
