@@ -24,5 +24,7 @@ def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
               registro):
     if not actividad:
         raise ErrorInscripcion("Debe seleccionar una actividad")
+    if not horario:
+        raise ErrorInscripcion("Debe seleccionar un horario")
     inscripcion = Inscripcion(actividad, horario, visitantes)
     registro.append(inscripcion)
