@@ -32,6 +32,7 @@
 | 24 | `test_turno_fuera_de_rango` (3 casos) | Los turnos de las 8:00, 18:00 y 12:30 se aceptaban: 3 `DID NOT RAISE`. | Nacen `HORA_PRIMER_TURNO` y `HORA_ULTIMO_TURNO`; `inscribir` exige un turno en punto entre las 9 y las 17. | No hizo falta (se espera al resto del grupo). |
 | 25 | `test_dia_lunes_cerrado` | Un turno del lunes 26/10 se aceptaba: `DID NOT RAISE ErrorInscripcion`. | Nace `LUNES = 0` en `reglas.py`; `inscribir` lanza error si `horario.weekday()` es lunes. | No hizo falta. |
 | 26 | `test_dia_feriado_cerrado` (2 casos) | Los turnos del 25/12 y del 1/1 se aceptaban: 2 `DID NOT RAISE`. | Nace `FERIADOS = [(25, 12), (1, 1)]`; `inscribir` lanza error si el (día, mes) del turno está en esa lista. | No hizo falta. |
+| 27 | `test_turno_ya_pasado` | Primero fallaron los 37 tests con `TypeError` (faltaba el parámetro `ahora`); con el stub, quedó solo el nuevo: `DID NOT RAISE ErrorInscripcion`. | `inscribir` lanza error si el turno empieza antes de `ahora`. | No hizo falta. |
 
 ## Supuestos
 

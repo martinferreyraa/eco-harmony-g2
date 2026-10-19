@@ -95,6 +95,8 @@ def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
         raise ErrorInscripcion("El parque está cerrado los lunes")
     if (horario.day, horario.month) in FERIADOS:
         raise ErrorInscripcion("El parque está cerrado el 25/12 y el 1/1")
+    if horario < ahora:
+        raise ErrorInscripcion("El turno seleccionado ya pasó")
     if cantidad < 1:
         raise ErrorInscripcion("Debe indicar al menos una persona")
     if cantidad != len(visitantes):
