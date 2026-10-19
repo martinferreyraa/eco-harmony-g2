@@ -440,3 +440,19 @@ def test_mail_incluye_numero_de_orden(datos_validos, registro, enviador):
 
     # Assert
     assert "Número de orden: 3" in enviador.enviados[0].cuerpo
+
+
+def test_mail_incluye_qr_por_visitante(datos_validos, enviador):
+    # Arrange: dos visitantes
+    datos_validos["cantidad"] = 2
+    datos_validos["visitantes"].append(
+        Visitante("Luis Gómez", "31234567", "40"))
+
+    # Act
+    inscribir(**datos_validos)
+
+    # Assert: un QR por visitante, con sus datos y los del turno
+    assert enviador.enviados[0].qrs == [
+        "Orden 1 | Ana Pérez | DNI 30123456 | Safari | 20/10/2026 12:00",
+        "Orden 1 | Luis Gómez | DNI 31234567 | Safari | 20/10/2026 12:00",
+    ]
