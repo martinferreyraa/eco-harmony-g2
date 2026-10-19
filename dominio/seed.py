@@ -2,7 +2,7 @@ from datetime import timedelta
 
 from dominio.inscripcion import (Inscripcion, Visitante,
                                  cupo_disponible, es_reservable)
-from dominio.reglas import ANTICIPACION_MAXIMA, CUPOS
+from dominio.reglas import ANTICIPACION_MAXIMA
 
 
 def proximo_turno_reservable(ahora):
