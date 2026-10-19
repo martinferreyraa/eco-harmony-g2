@@ -77,3 +77,14 @@ def test_no_acepta_terminos(datos_validos, registro):
                        match="Debe aceptar los términos y condiciones"):
         inscribir(**datos_validos)
     assert len(registro) == 0
+
+
+def test_actividad_inexistente(datos_validos, registro):
+    # Arrange
+    datos_validos["actividad"] = "Buceo"
+
+    # Act y Assert
+    with pytest.raises(ErrorInscripcion,
+                       match="La actividad seleccionada no existe"):
+        inscribir(**datos_validos)
+    assert len(registro) == 0
