@@ -117,6 +117,24 @@ def validar_anticipacion(horario, ahora):
             "Se debe reservar al menos 15 minutos antes del turno")
 
 
+def dnis_inscriptos(horario, registro):
+    dnis = []
+    for anterior in registro:
+        if anterior.horario == horario:
+            for inscripto in anterior.visitantes:
+                dnis.append(inscripto.dni)
+    return dnis
+
+
+def validar_superposicion(horario, visitantes, registro):
+    ya_inscriptos = dnis_inscriptos(horario, registro)
+    for visitante in visitantes:
+        if visitante.dni in ya_inscriptos:
+            raise ErrorInscripcion(
+                f"El DNI {visitante.dni} ya tiene una inscripción en ese "
+                "horario")
+
+
 def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
               registro, ahora):
     validar_seleccion(actividad, horario)
@@ -130,5 +148,6 @@ def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
         raise ErrorInscripcion(
             "Debe aceptar los términos y condiciones de la actividad")
     validar_cupo(actividad, horario, cantidad, registro)
+    validar_superposicion(horario, visitantes, registro)
     inscripcion = Inscripcion(actividad, horario, visitantes)
     registro.append(inscripcion)

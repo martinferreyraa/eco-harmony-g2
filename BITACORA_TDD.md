@@ -39,6 +39,7 @@
 | 31 | `test_reserva_justo_15min_antes_pasa` | No hubo Red: pasó de entrada, porque el ciclo 29 usa `<` (15 min justos no son menos que el mínimo). Fija que el límite es inclusivo. | No hizo falta código nuevo. | Ver fila R5. |
 | R5 | Refactor del grupo 6 (tiempo) | — | — | Los 6 chequeos de tiempo pasaron a `validar_turno` (rango, lunes, feriados) y `validar_anticipacion` (ya pasó, 24 hs, 15 min). 41 tests en verde. |
 | R6 | Refactor de la cantidad | — | — | Los dos chequeos de cantidad (al menos 1 y que coincida con los visitantes) pasaron a `validar_cantidad`. 41 tests en verde. |
+| 32 | `test_dni_inscripto_mismo_horario` | Ana ya estaba en Tirolesa a las 12:00 y se la podía anotar en Safari a la misma hora: `DID NOT RAISE ErrorInscripcion`. | `dnis_inscriptos` junta los DNI ya anotados en ese horario (cualquier actividad) y `validar_superposicion` rechaza a quien ya esté. | No hizo falta: ya quedó separado en dos funciones cortas. |
 
 ## Supuestos
 
@@ -53,3 +54,4 @@ Cosas que no estaban escritas en CLAUDE.md y se resolvieron con la opción más 
 - Un talle inválido enviado a una actividad que no requiere talle también se ignora (no se valida).
 - La cantidad de personas llega como número entero: en la GUI se elige de una lista desplegable y la web la convierte con `int(...)`.
 - El cupo no se guarda: se calcula como `CUPOS[actividad]` menos las personas ya inscriptas en ese turno (contadas en `registro`). "Descontar el cupo" es agregar la inscripción al registro.
+- La superposición se controla por horario de inicio: como todos los turnos duran una hora y empiezan en punto, "mismo horario" es "mismo inicio". También bloquea el mismo DNI dos veces en la misma actividad y turno.
