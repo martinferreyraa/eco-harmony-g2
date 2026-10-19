@@ -1,6 +1,15 @@
 import pytest
 
-from dominio.inscripcion import ErrorInscripcion, inscribir
+from dominio.inscripcion import (ErrorInscripcion, Inscripcion, Visitante,
+                                 inscribir)
+
+
+def crear_visitantes(cantidad):
+    visitantes = []
+    for numero in range(cantidad):
+        dni = str(40000000 + numero)
+        visitantes.append(Visitante(f"Visitante {numero}", dni, "30"))
+    return visitantes
 
 
 def test_inscripcion_exitosa(datos_validos, registro):
@@ -230,3 +239,16 @@ def test_cantidad_no_coincide_con_visitantes(datos_validos, registro):
                        match="La cantidad de personas no coincide"):
         inscribir(**datos_validos)
     assert len(registro) == 0
+
+
+def test_actividad_sin_cupo(datos_validos, registro):
+    # Arrange: el turno de Safari ya tiene sus 8 lugares ocupados
+    turno_lleno = Inscripcion("Safari", datos_validos["horario"],
+                              crear_visitantes(8))
+    registro.append(turno_lleno)
+
+    # Act y Assert
+    with pytest.raises(ErrorInscripcion,
+                       match="No hay cupo disponible para Safari"):
+        inscribir(**datos_validos)
+    assert len(registro) == 1
