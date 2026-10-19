@@ -70,3 +70,4 @@ Cosas que no estaban escritas en CLAUDE.md y se resolvieron con la opción más 
 - Solo se capturan errores `OSError` al enviar el mail (cubre los de red y los de `smtplib`, que heredan de `OSError`). Otros errores (un bug, por ejemplo) no se esconden.
 - Si no hay ningún turno reservable en las próximas 24 hs (por ejemplo, un domingo a la noche), `crear_seed` devuelve un registro vacío: la demo no muestra el caso "sin cupo", pero la app no se rompe.
 - El test del seed vive en `tests/test_seed.py`, separado de los de `inscribir`.
+- Los textos de `TERMINOS` los redactamos nosotros (FAQ #16) y quedan a revisión del grupo y de los PO; no tienen test porque son contenido, no comportamiento.
