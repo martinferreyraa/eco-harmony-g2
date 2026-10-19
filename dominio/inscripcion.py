@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from datetime import datetime
 
 from dominio.reglas import (ACTIVIDADES, CUPOS, EDAD_MINIMA,
-                            HORA_PRIMER_TURNO, HORA_ULTIMO_TURNO,
+                            HORA_PRIMER_TURNO, HORA_ULTIMO_TURNO, LUNES,
                             REQUIEREN_TALLE, TALLES)
 
 
@@ -91,6 +91,8 @@ def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
         raise ErrorInscripcion(
             "El horario debe ser un turno en punto entre las "
             f"{HORA_PRIMER_TURNO} y las {HORA_ULTIMO_TURNO} hs")
+    if horario.weekday() == LUNES:
+        raise ErrorInscripcion("El parque está cerrado los lunes")
     if cantidad < 1:
         raise ErrorInscripcion("Debe indicar al menos una persona")
     if cantidad != len(visitantes):
