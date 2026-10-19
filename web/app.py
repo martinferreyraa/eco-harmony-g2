@@ -4,7 +4,8 @@ from flask import Flask, render_template, request
 from werkzeug.datastructures import MultiDict
 
 from dominio.inscripcion import (ErrorInscripcion, Visitante, cupo_disponible,
-                                 es_numero, es_reservable, inscribir)
+                                 es_numero, es_reservable, inscribir,
+                                 validar_actividad)
 from dominio.reglas import (ACTIVIDADES, CUPOS, FERIADOS, HORA_PRIMER_TURNO,
                             HORA_ULTIMO_TURNO, LUNES, REQUIEREN_TALLE,
                             TALLES, TERMINOS)
@@ -65,16 +66,26 @@ def mostrar_formulario(actividad, cantidad, valores, error=None):
 
 # --- Rutas
 
+def mostrar_inicio(actividad="", cantidad=1, error=None):
+    return render_template("inicio.html", actividades=ACTIVIDADES,
+                           maximo_personas=MAXIMO_PERSONAS,
+                           actividad_elegida=actividad,
+                           cantidad_elegida=cantidad, error=error)
+
+
 @app.get("/")
 def inicio():
-    return render_template("inicio.html", actividades=ACTIVIDADES,
-                           maximo_personas=MAXIMO_PERSONAS)
+    return mostrar_inicio()
 
 
 @app.get("/inscripcion")
 def formulario():
     actividad = request.args.get("actividad", "")
     cantidad = a_entero(request.args.get("cantidad", ""))
+    try:
+        validar_actividad(actividad)
+    except ErrorInscripcion as error:
+        return mostrar_inicio(actividad, cantidad, error)
     return mostrar_formulario(actividad, cantidad, MultiDict())
 
 
@@ -90,8 +101,7 @@ def confirmar():
         inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
                   registro, datetime.now(), enviador)
     except ErrorInscripcion as error:
-        return mostrar_formulario(actividad, cantidad, request.form,
-                                  str(error))
+        return mostrar_formulario(actividad, cantidad, request.form, error)
     return render_template("confirmacion.html", actividad=actividad,
                            horario=horario, visitantes=visitantes)
 

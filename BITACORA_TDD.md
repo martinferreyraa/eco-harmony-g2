@@ -90,3 +90,4 @@ Cosas que no estaban escritas en CLAUDE.md y se resolvieron con la opción más 
 - La inscripción de ejemplo del seed ocupa el número de orden 1, así que la primera inscripción real de la demo recibe el 2.
 - Nombre: `isalpha()` acepta letras de cualquier alfabeto (también "ç" u "ö"), no solo las del español. Como cada palabra necesita al menos 2 letras, un nombre como "Ortega y Gasset" se rechaza por la "y"; es consecuencia de la regla elegida.
 - El error "no hay cupo en ese horario" se muestra bajo el turno (campo `horario`), porque se soluciona eligiendo otro turno; "solo quedan N lugares" va en `cantidad`, porque se soluciona anotando menos personas.
+- En el primer paso ("Continuar") la web llama a `validar_actividad` del dominio; si falla, vuelve al inicio con el error debajo del select y conserva la cantidad elegida. La cantidad no se valida ahí porque sale de una lista desplegable.

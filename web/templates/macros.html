@@ -1,0 +1,18 @@
+{# El dominio dice en qué campo está el error (error.campo).
+   Estas macros solo lo muestran en el lugar correcto. #}
+
+{% macro error_de(campo, error) %}
+{% if error and error.campo == campo %}
+<p class="error-campo" id="error-{{ campo }}" role="alert">{{ error }}</p>
+{% endif %}
+{% endmacro %}
+
+{% macro marcar(campo, error) %}
+{% if error and error.campo == campo %}aria-invalid="true" aria-describedby="error-{{ campo }}"{% endif %}
+{% endmacro %}
+
+{% macro error_general(error) %}
+{% if error and error.campo is none %}
+<p class="error" role="alert">{{ error }}</p>
+{% endif %}
+{% endmacro %}

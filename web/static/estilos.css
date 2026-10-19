@@ -207,6 +207,19 @@ select:focus {
   margin: 4px 0;
 }
 
+/* Error debajo de su campo (el dominio indica cuál con error.campo) */
+.error-campo {
+  margin: 4px 0 0;
+  color: var(--rojo);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+[aria-invalid="true"] {
+  border-color: var(--rojo);
+  outline: 2px solid var(--rojo);
+}
+
 .exito {
   padding: 12px 16px;
   background: var(--verde-claro);
