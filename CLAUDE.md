@@ -90,6 +90,11 @@ tests/
   (el CA dice que "se debe enviar" el correo al finalizar). Orden en `inscribir(...)`:
   validar todo → enviar el mail → recién después registrar la inscripción y descontar
   el cupo. Si el envío falla, se lanza un error y el cupo queda intacto.
+- **Errores con campo:** `ErrorInscripcion(mensaje, campo)`. El campo dice dónde mostrar
+  el error en la GUI: `actividad`, `horario`, `cantidad`, `terminos` o el dato del
+  visitante N (`nombre-N`, `dni-N`, `edad-N`, `talle-N`, contando desde 0). Si el error
+  no es de un campo (falla del mail), `campo` es `None` y se muestra arriba.
+  Se informa un error a la vez (el primero que se encuentra).
 - **QR:** uno por visitante, adjunto al mail. `texto_qr` vive en `dominio/inscripcion.py`
   y se testea QUÉ datos contiene, no la imagen. `servicios/qr.py` solo tiene `imagen_qr`
   (lo único que usa la librería `qrcode`), sin test: se verifica a mano en la demo.
@@ -109,9 +114,13 @@ tests/
   Si se envía talle a una actividad que no lo requiere, se ignora (decisión del grupo).
 - Edad mínima: Palestra 12, Tirolesa 8, Safari y Jardinería sin límite (FAQ #15).
 - Datos por visitante: nombre, DNI, edad y talle si corresponde (US). Solo DNI, sin pasaporte (FAQ #32).
-  Formato del DNI: solo dígitos, sin puntos ni espacios, 7 u 8 caracteres
+  Formato del DNI: solo dígitos (0 a 9), sin puntos ni espacios, 7 u 8 caracteres y
+  sin ceros adelante, o sea un número entre 1.000.000 y 99.999.999
   (convención habitual en sistemas argentinos; decisión del grupo).
   Edad válida: número entero entre 0 y 120 (decisión del grupo).
+  Nombre completo: al menos dos palabras de al menos 2 letras cada una. Solo letras
+  (con tildes y ñ), apóstrofo y guion dentro de las palabras, y espacios entre ellas.
+  Sin números, símbolos ni puntos (decisión del grupo).
 - Un mismo DNI no puede aparecer dos veces en la misma inscripción (decisión del grupo).
 - Sin máximo de personas por inscripción: el único límite es el cupo (FAQ #31).
 - Un mismo DNI no puede estar inscripto en dos actividades en el mismo horario (FAQ #29).
@@ -129,7 +138,8 @@ tests/
    `test_nombre_vacio`, `test_dni_vacio`, `test_edad_vacia`, `test_no_acepta_terminos`,
    `test_actividad_inexistente` (decisión del grupo; cuando exista `ACTIVIDADES`
    en `reglas.py`; mensaje distinto al de "no seleccionó actividad")
-3. Formato: `test_dni_invalido`, `test_edad_invalida`, `test_edad_cero_valida`
+3. Formato: `test_dni_invalido`, `test_edad_invalida`, `test_edad_cero_valida`,
+   `test_nombre_invalido` (decisión del grupo)
 4. Por actividad: `test_talle_requerido_faltante`, `test_talle_no_requerido_omitido`,
    `test_talle_invalido`, `test_edad_menor_minimo_palestra`,
    `test_edad_menor_minimo_tirolesa`, `test_edad_igual_minimo_pasa`,
