@@ -101,3 +101,15 @@ def test_dni_invalido(datos_validos, registro, dni):
                        match="El DNI debe tener 7 u 8 dígitos"):
         inscribir(**datos_validos)
     assert len(registro) == 0
+
+
+@pytest.mark.parametrize("edad", ["abc", "-1", "2.5", "121"])
+def test_edad_invalida(datos_validos, registro, edad):
+    # Arrange
+    datos_validos["visitantes"][0].edad = edad
+
+    # Act y Assert
+    with pytest.raises(ErrorInscripcion,
+                       match="La edad debe ser un número entero"):
+        inscribir(**datos_validos)
+    assert len(registro) == 0
