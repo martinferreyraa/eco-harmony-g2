@@ -33,6 +33,7 @@
 | 25 | `test_dia_lunes_cerrado` | Un turno del lunes 26/10 se aceptaba: `DID NOT RAISE ErrorInscripcion`. | Nace `LUNES = 0` en `reglas.py`; `inscribir` lanza error si `horario.weekday()` es lunes. | No hizo falta. |
 | 26 | `test_dia_feriado_cerrado` (2 casos) | Los turnos del 25/12 y del 1/1 se aceptaban: 2 `DID NOT RAISE`. | Nace `FERIADOS = [(25, 12), (1, 1)]`; `inscribir` lanza error si el (día, mes) del turno está en esa lista. | No hizo falta. |
 | 27 | `test_turno_ya_pasado` | Primero fallaron los 37 tests con `TypeError` (faltaba el parámetro `ahora`); con el stub, quedó solo el nuevo: `DID NOT RAISE ErrorInscripcion`. | `inscribir` lanza error si el turno empieza antes de `ahora`. | No hizo falta. |
+| 28 | `test_reserva_mas_de_24hs_antes` | Un turno 25 hs después de `ahora` se aceptaba: `DID NOT RAISE ErrorInscripcion`. | Nace `ANTICIPACION_MAXIMA = timedelta(hours=24)`; `inscribir` lanza error si `horario - ahora` la supera. | No hizo falta. |
 
 ## Supuestos
 

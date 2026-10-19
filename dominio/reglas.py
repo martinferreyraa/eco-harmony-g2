@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 ACTIVIDADES = ["Tirolesa", "Safari", "Palestra", "Jardinería"]
 REQUIEREN_TALLE = ["Palestra", "Tirolesa"]
 TALLES = ["XS", "S", "M", "L", "XL", "XXL"]
@@ -7,3 +9,4 @@ HORA_PRIMER_TURNO = 9
 HORA_ULTIMO_TURNO = 17
 LUNES = 0  # datetime.weekday() devuelve 0 para el lunes
 FERIADOS = [(25, 12), (1, 1)]  # (día, mes)
+ANTICIPACION_MAXIMA = timedelta(hours=24)

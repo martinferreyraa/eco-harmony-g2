@@ -1,9 +1,10 @@
 from dataclasses import dataclass
 from datetime import datetime
 
-from dominio.reglas import (ACTIVIDADES, CUPOS, EDAD_MINIMA, FERIADOS,
-                            HORA_PRIMER_TURNO, HORA_ULTIMO_TURNO, LUNES,
-                            REQUIEREN_TALLE, TALLES)
+from dominio.reglas import (ACTIVIDADES, ANTICIPACION_MAXIMA, CUPOS,
+                            EDAD_MINIMA, FERIADOS, HORA_PRIMER_TURNO,
+                            HORA_ULTIMO_TURNO, LUNES, REQUIEREN_TALLE,
+                            TALLES)
 
 
 class ErrorInscripcion(Exception):
@@ -97,6 +98,9 @@ def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
         raise ErrorInscripcion("El parque está cerrado el 25/12 y el 1/1")
     if horario < ahora:
         raise ErrorInscripcion("El turno seleccionado ya pasó")
+    if horario - ahora > ANTICIPACION_MAXIMA:
+        raise ErrorInscripcion(
+            "Solo se puede reservar desde 24 hs antes del turno")
     if cantidad < 1:
         raise ErrorInscripcion("Debe indicar al menos una persona")
     if cantidad != len(visitantes):
