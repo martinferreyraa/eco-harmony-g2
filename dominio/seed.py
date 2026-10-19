@@ -20,10 +20,11 @@ def crear_seed(registro, ahora):
     turno = proximo_turno_reservable(ahora)
     if turno is None:
         return
-    if cupo_disponible("Safari", turno, registro) == 0:
+    lugares = cupo_disponible("Safari", turno, registro)
+    if lugares == 0:
         return
     visitantes = []
-    for numero in range(CUPOS["Safari"]):
+    for numero in range(lugares):
         dni = str(10000000 + numero)
         visitantes.append(Visitante(f"Visitante {numero + 1}", dni, "30"))
     registro.append(Inscripcion("Safari", turno, visitantes))
