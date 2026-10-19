@@ -22,5 +22,7 @@ class Inscripcion:
 
 def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
               registro):
+    if not actividad:
+        raise ErrorInscripcion("Debe seleccionar una actividad")
     inscripcion = Inscripcion(actividad, horario, visitantes)
     registro.append(inscripcion)
