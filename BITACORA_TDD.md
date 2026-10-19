@@ -40,6 +40,7 @@
 | R5 | Refactor del grupo 6 (tiempo) | — | — | Los 6 chequeos de tiempo pasaron a `validar_turno` (rango, lunes, feriados) y `validar_anticipacion` (ya pasó, 24 hs, 15 min). 41 tests en verde. |
 | R6 | Refactor de la cantidad | — | — | Los dos chequeos de cantidad (al menos 1 y que coincida con los visitantes) pasaron a `validar_cantidad`. 41 tests en verde. |
 | 32 | `test_dni_inscripto_mismo_horario` | Ana ya estaba en Tirolesa a las 12:00 y se la podía anotar en Safari a la misma hora: `DID NOT RAISE ErrorInscripcion`. | `dnis_inscriptos` junta los DNI ya anotados en ese horario (cualquier actividad) y `validar_superposicion` rechaza a quien ya esté. | No hizo falta: ya quedó separado en dos funciones cortas. |
+| 33 | `test_envia_mail_al_confirmar` | Primero fallaron los 43 tests con `TypeError` (faltaba el parámetro `enviador`); con el stub, quedó solo el nuevo: `assert 0 == 1` (no se enviaba ningún mail). | Nace el dataclass `Mail(asunto, cuerpo, qrs)`; `inscribir` llama a `enviador.enviar(mail)` después de validar y antes de registrar. Cuerpo y QR quedan vacíos hasta sus tests. | No hizo falta. |
 
 ## Supuestos
 

@@ -27,6 +27,13 @@ class Inscripcion:
     visitantes: list
 
 
+@dataclass
+class Mail:
+    asunto: str
+    cuerpo: str
+    qrs: list
+
+
 def validar_seleccion(actividad, horario):
     if not actividad:
         raise ErrorInscripcion("Debe seleccionar una actividad")
@@ -149,5 +156,7 @@ def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
             "Debe aceptar los términos y condiciones de la actividad")
     validar_cupo(actividad, horario, cantidad, registro)
     validar_superposicion(horario, visitantes, registro)
+    mail = Mail(f"Inscripción confirmada: {actividad}", "", [])
+    enviador.enviar(mail)
     inscripcion = Inscripcion(actividad, horario, visitantes)
     registro.append(inscripcion)
