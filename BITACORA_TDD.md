@@ -17,6 +17,7 @@
 | 12 | `test_talle_requerido_faltante` | En Palestra, un visitante sin talle se registraba igual: `DID NOT RAISE ErrorInscripcion`. | `Visitante` suma `talle` (vacío por defecto), nace `REQUIEREN_TALLE` en `reglas.py` y se lanza error si la actividad lo pide y falta. | No hizo falta (se espera al resto del grupo). |
 | 13 | `test_talle_no_requerido_omitido` | No hubo Red: pasó de entrada, porque el ciclo 12 solo pide talle a las actividades de `REQUIEREN_TALLE`. Cubre la prueba de usuario de la US "sin talle porque no lo requiere (pasa)". | No hizo falta código nuevo. | No hizo falta. |
 | 14 | `test_talle_invalido` | En Palestra, el talle "XXXL" se aceptaba: `DID NOT RAISE ErrorInscripcion`. | Nace `TALLES` en `reglas.py`; si la actividad requiere talle, tiene que ser uno de esa lista. | No hizo falta (se espera al resto del grupo). |
+| 15 | `test_edad_menor_minimo_palestra` | Un visitante de 11 años se inscribía en Palestra: `DID NOT RAISE ErrorInscripcion`. | Regla escrita a mano y a propósito solo para Palestra (`< 12`): es lo mínimo; el próximo test obliga a generalizarla. | No hizo falta todavía. |
 
 ## Supuestos
 
