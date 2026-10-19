@@ -48,7 +48,7 @@ def validar_seleccion(actividad, horario):
         raise ErrorInscripcion("La actividad seleccionada no existe",
                                "actividad")
     if not horario:
-        raise ErrorInscripcion("Debe seleccionar un horario")
+        raise ErrorInscripcion("Debe seleccionar un horario", "horario")
 
 
 def es_numero(texto):
@@ -159,7 +159,8 @@ def validar_cupo(actividad, horario, cantidad, registro):
     disponibles = cupo_disponible(actividad, horario, registro)
     if disponibles <= 0:
         raise ErrorInscripcion(
-            f"No hay cupo disponible para {actividad} en ese horario")
+            f"No hay cupo disponible para {actividad} en ese horario",
+            "horario")
     if cantidad > disponibles:
         raise ErrorInscripcion(
             f"Solo quedan {disponibles} lugares disponibles para "
@@ -172,22 +173,27 @@ def validar_turno(horario):
     if not es_turno_en_punto or not esta_en_rango:
         raise ErrorInscripcion(
             "El horario debe ser un turno en punto entre las "
-            f"{HORA_PRIMER_TURNO} y las {HORA_ULTIMO_TURNO} hs")
+            f"{HORA_PRIMER_TURNO} y las {HORA_ULTIMO_TURNO} hs",
+            "horario")
     if horario.weekday() == LUNES:
-        raise ErrorInscripcion("El parque está cerrado los lunes")
+        raise ErrorInscripcion("El parque está cerrado los lunes",
+                               "horario")
     if (horario.day, horario.month) in FERIADOS:
-        raise ErrorInscripcion("El parque está cerrado el 25/12 y el 1/1")
+        raise ErrorInscripcion("El parque está cerrado el 25/12 y el 1/1",
+                               "horario")
 
 
 def validar_anticipacion(horario, ahora):
     if horario < ahora:
-        raise ErrorInscripcion("El turno seleccionado ya pasó")
+        raise ErrorInscripcion("El turno seleccionado ya pasó", "horario")
     if horario - ahora > ANTICIPACION_MAXIMA:
         raise ErrorInscripcion(
-            "Solo se puede reservar desde 24 hs antes del turno")
+            "Solo se puede reservar desde 24 hs antes del turno",
+            "horario")
     if horario - ahora < ANTICIPACION_MINIMA:
         raise ErrorInscripcion(
-            "Se debe reservar al menos 15 minutos antes del turno")
+            "Se debe reservar al menos 15 minutos antes del turno",
+            "horario")
 
 
 def dnis_inscriptos(horario, registro):
