@@ -41,12 +41,16 @@ class Mail:
     qrs: list
 
 
-def validar_seleccion(actividad, horario):
+def validar_actividad(actividad):
     if not actividad:
         raise ErrorInscripcion("Debe seleccionar una actividad", "actividad")
     if actividad not in ACTIVIDADES:
         raise ErrorInscripcion("La actividad seleccionada no existe",
                                "actividad")
+
+
+def validar_seleccion(actividad, horario):
+    validar_actividad(actividad)
     if not horario:
         raise ErrorInscripcion("Debe seleccionar un horario", "horario")
 
