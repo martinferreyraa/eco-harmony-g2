@@ -207,3 +207,15 @@ def test_safari_sin_limite_edad(datos_validos, registro):
 
     # Assert
     assert len(registro) == 1
+
+
+def test_cantidad_cero(datos_validos, registro):
+    # Arrange
+    datos_validos["cantidad"] = 0
+    datos_validos["visitantes"] = []
+
+    # Act y Assert
+    with pytest.raises(ErrorInscripcion,
+                       match="Debe indicar al menos una persona"):
+        inscribir(**datos_validos)
+    assert len(registro) == 0
