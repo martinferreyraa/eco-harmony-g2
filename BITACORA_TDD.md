@@ -46,6 +46,7 @@
 | 36 | `test_mail_incluye_numero_de_orden` | Con 2 inscripciones previas, el mail no decía el número de orden: `assert "Número de orden: 3" in ...`. | `inscribir` calcula `numero_orden = len(registro) + 1` antes del `append` y `armar_cuerpo` lo agrega como segunda línea. | No hizo falta. |
 | 37 | `test_mail_incluye_qr_por_visitante` | El mail no traía ningún QR: `assert [] == ["Orden 1 \| Ana Pérez ...", ...]`. | Nace `texto_qr(numero_orden, visitante, actividad, horario)` en el dominio; `inscribir` arma un texto por visitante y los pone en `mail.qrs`. | Ver fila R7. |
 | R7 | Refactor del mail | — | — | El formato de fecha repetido pasó a la constante `FORMATO_FECHA_HORA` (con `strftime`) y el armado del mail con sus QR a `armar_mail`. 47 tests en verde. |
+| 38 | `test_falla_envio_mail_no_inscribe` | Con el servidor caído, el `ConnectionError` salía tal cual, sin un mensaje para el visitante: `ConnectionError: El servidor de mail no responde`. | `inscribir` envuelve `enviador.enviar` en `try/except OSError` y lanza `ErrorInscripcion`; como el `append` está después, no se registra ni se descuenta cupo. | No hizo falta. |
 
 ## Supuestos
 
@@ -62,3 +63,4 @@ Cosas que no estaban escritas en CLAUDE.md y se resolvieron con la opción más 
 - El cupo no se guarda: se calcula como `CUPOS[actividad]` menos las personas ya inscriptas en ese turno (contadas en `registro`). "Descontar el cupo" es agregar la inscripción al registro.
 - La superposición se controla por horario de inicio: como todos los turnos duran una hora y empiezan en punto, "mismo horario" es "mismo inicio". También bloquea el mismo DNI dos veces en la misma actividad y turno.
 - El resumen del mail lleva actividad, fecha y hora, cantidad de personas, número de orden y una línea por visitante con nombre, DNI, edad y talle (si tiene). El grupo eligió "Other" en esa pregunta pero no llegó el texto; se siguió el FAQ #18 (detalle de visitantes).
+- Solo se capturan errores `OSError` al enviar el mail (cubre los de red y los de `smtplib`, que heredan de `OSError`). Otros errores (un bug, por ejemplo) no se esconden.

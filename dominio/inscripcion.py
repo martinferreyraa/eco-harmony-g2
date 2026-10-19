@@ -193,6 +193,12 @@ def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
     validar_superposicion(horario, visitantes, registro)
     numero_orden = len(registro) + 1
     mail = armar_mail(numero_orden, actividad, horario, visitantes)
-    enviador.enviar(mail)
+    try:
+        enviador.enviar(mail)
+    except OSError:
+        # Errores de red y de SMTP: smtplib.SMTPException hereda de OSError
+        raise ErrorInscripcion(
+            "No se pudo enviar el mail de confirmación; "
+            "la inscripción no se realizó")
     inscripcion = Inscripcion(actividad, horario, visitantes)
     registro.append(inscripcion)
