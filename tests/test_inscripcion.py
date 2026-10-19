@@ -87,8 +87,9 @@ def test_no_acepta_terminos(datos_validos, registro):
 
     # Act y Assert
     with pytest.raises(ErrorInscripcion,
-                       match="Debe aceptar los términos y condiciones"):
+                       match="Debe aceptar los términos y condiciones") as error:
         inscribir(**datos_validos)
+    assert error.value.campo == "terminos"
     assert len(registro) == 0
 
 
