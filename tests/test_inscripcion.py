@@ -502,9 +502,11 @@ def test_falla_envio_mail_no_inscribe(datos_validos, registro,
     horario = datos_validos["horario"]
 
     # Act y Assert
-    with pytest.raises(ErrorInscripcion,
-                       match="No se pudo enviar el mail de confirmación"):
+    with pytest.raises(
+            ErrorInscripcion,
+            match="No se pudo enviar el mail de confirmación") as error:
         inscribir(**datos_validos)
+    assert error.value.campo is None
     assert len(registro) == 0
     assert cupo_disponible("Safari", horario, registro) == 8
 
