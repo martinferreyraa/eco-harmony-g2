@@ -65,6 +65,15 @@ def validar_reglas_de_actividad(visitante, actividad):
             f"La edad mínima para {actividad} es {edad_minima} años")
 
 
+def validar_cantidad(cantidad, visitantes):
+    if cantidad < 1:
+        raise ErrorInscripcion("Debe indicar al menos una persona")
+    if cantidad != len(visitantes):
+        raise ErrorInscripcion(
+            "La cantidad de personas no coincide con los visitantes "
+            "ingresados")
+
+
 def cupo_disponible(actividad, horario, registro):
     ocupados = 0
     for anterior in registro:
@@ -113,12 +122,7 @@ def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
     validar_seleccion(actividad, horario)
     validar_turno(horario)
     validar_anticipacion(horario, ahora)
-    if cantidad < 1:
-        raise ErrorInscripcion("Debe indicar al menos una persona")
-    if cantidad != len(visitantes):
-        raise ErrorInscripcion(
-            "La cantidad de personas no coincide con los visitantes "
-            "ingresados")
+    validar_cantidad(cantidad, visitantes)
     for visitante in visitantes:
         validar_visitante(visitante)
         validar_reglas_de_actividad(visitante, actividad)

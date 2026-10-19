@@ -38,6 +38,7 @@
 | 30 | `test_reserva_justo_24hs_antes_pasa` | No hubo Red: pasó de entrada, porque el ciclo 28 usa `>` (24 hs justas no superan el máximo). Fija que el límite es inclusivo. | No hizo falta código nuevo. | No hizo falta. |
 | 31 | `test_reserva_justo_15min_antes_pasa` | No hubo Red: pasó de entrada, porque el ciclo 29 usa `<` (15 min justos no son menos que el mínimo). Fija que el límite es inclusivo. | No hizo falta código nuevo. | Ver fila R5. |
 | R5 | Refactor del grupo 6 (tiempo) | — | — | Los 6 chequeos de tiempo pasaron a `validar_turno` (rango, lunes, feriados) y `validar_anticipacion` (ya pasó, 24 hs, 15 min). 41 tests en verde. |
+| R6 | Refactor de la cantidad | — | — | Los dos chequeos de cantidad (al menos 1 y que coincida con los visitantes) pasaron a `validar_cantidad`. 41 tests en verde. |
 
 ## Supuestos
 
