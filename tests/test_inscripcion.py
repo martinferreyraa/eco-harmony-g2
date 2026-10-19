@@ -88,3 +88,16 @@ def test_actividad_inexistente(datos_validos, registro):
                        match="La actividad seleccionada no existe"):
         inscribir(**datos_validos)
     assert len(registro) == 0
+
+
+@pytest.mark.parametrize("dni", ["12.345.678", "123456", "123456789",
+                                 "12A45678", "30 123 456"])
+def test_dni_invalido(datos_validos, registro, dni):
+    # Arrange
+    datos_validos["visitantes"][0].dni = dni
+
+    # Act y Assert
+    with pytest.raises(ErrorInscripcion,
+                       match="El DNI debe tener 7 u 8 dígitos"):
+        inscribir(**datos_validos)
+    assert len(registro) == 0
