@@ -84,6 +84,15 @@ def validar_cantidad(cantidad, visitantes):
             "ingresados")
 
 
+def validar_dnis_distintos(visitantes):
+    vistos = []
+    for visitante in visitantes:
+        if visitante.dni in vistos:
+            raise ErrorInscripcion(
+                f"El DNI {visitante.dni} está repetido en la inscripción")
+        vistos.append(visitante.dni)
+
+
 def cupo_disponible(actividad, horario, registro):
     ocupados = 0
     for anterior in registro:
@@ -186,6 +195,7 @@ def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
     for visitante in visitantes:
         validar_visitante(visitante)
         validar_reglas_de_actividad(visitante, actividad)
+    validar_dnis_distintos(visitantes)
     if not acepta_terminos:
         raise ErrorInscripcion(
             "Debe aceptar los términos y condiciones de la actividad")
