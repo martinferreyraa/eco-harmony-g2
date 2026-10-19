@@ -231,8 +231,9 @@ def test_cantidad_cero(datos_validos, registro):
 
     # Act y Assert
     with pytest.raises(ErrorInscripcion,
-                       match="Debe indicar al menos una persona"):
+                       match="Debe indicar al menos una persona") as error:
         inscribir(**datos_validos)
+    assert error.value.campo == "cantidad"
     assert len(registro) == 0
 
 
@@ -242,8 +243,9 @@ def test_cantidad_no_coincide_con_visitantes(datos_validos, registro):
 
     # Act y Assert
     with pytest.raises(ErrorInscripcion,
-                       match="La cantidad de personas no coincide"):
+                       match="La cantidad de personas no coincide") as error:
         inscribir(**datos_validos)
+    assert error.value.campo == "cantidad"
     assert len(registro) == 0
 
 
@@ -274,8 +276,9 @@ def test_cantidad_supera_cupo_disponible(datos_validos, registro):
 
     # Act y Assert
     with pytest.raises(ErrorInscripcion,
-                       match="Solo quedan 2 lugares disponibles"):
+                       match="Solo quedan 2 lugares disponibles") as error:
         inscribir(**datos_validos)
+    assert error.value.campo == "cantidad"
     assert len(registro) == 1
 
 
