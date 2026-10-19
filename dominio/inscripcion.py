@@ -259,7 +259,8 @@ def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
     validar_dnis_distintos(visitantes)
     if not acepta_terminos:
         raise ErrorInscripcion(
-            "Debe aceptar los términos y condiciones de la actividad")
+            "Debe aceptar los términos y condiciones de la actividad",
+            "terminos")
     validar_cupo(actividad, horario, cantidad, registro)
     validar_superposicion(horario, visitantes, registro)
     numero_orden = len(registro) + 1
