@@ -10,3 +10,4 @@ HORA_ULTIMO_TURNO = 17
 LUNES = 0  # datetime.weekday() devuelve 0 para el lunes
 FERIADOS = [(25, 12), (1, 1)]  # (día, mes)
 ANTICIPACION_MAXIMA = timedelta(hours=24)
+ANTICIPACION_MINIMA = timedelta(minutes=15)
