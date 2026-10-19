@@ -476,10 +476,24 @@ def test_dni_repetido_misma_inscripcion(datos_validos, registro):
     # Arrange: el mismo DNI cargado dos veces en el formulario
     datos_validos["cantidad"] = 2
     datos_validos["visitantes"].append(
-        Visitante("Ana P.", "30123456", "25"))
+        Visitante("Ana Paula Pérez", "30123456", "25"))
 
     # Act y Assert
     with pytest.raises(ErrorInscripcion,
                        match="El DNI 30123456 está repetido"):
+        inscribir(**datos_validos)
+    assert len(registro) == 0
+
+
+@pytest.mark.parametrize("nombre", ["Ana", "Ana 123", "Ana P%rez",
+                                    "J. Pérez", "A B", "   "])
+def test_nombre_invalido(datos_validos, registro, nombre):
+    # Arrange: una palabra, números, símbolos, punto, una letra por
+    # palabra y solo espacios
+    datos_validos["visitantes"][0].nombre = nombre
+
+    # Act y Assert
+    with pytest.raises(ErrorInscripcion,
+                       match="Ingresá el nombre completo"):
         inscribir(**datos_validos)
     assert len(registro) == 0
