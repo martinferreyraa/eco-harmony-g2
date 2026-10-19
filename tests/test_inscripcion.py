@@ -377,3 +377,15 @@ def test_reserva_justo_15min_antes_pasa(datos_validos, registro):
 
     # Assert
     assert len(registro) == 1
+
+
+def test_dni_inscripto_mismo_horario(datos_validos, registro):
+    # Arrange: Ana ya está inscripta en Tirolesa a la misma hora
+    ana = Visitante("Ana Pérez", "30123456", "25", "M")
+    registro.append(Inscripcion("Tirolesa", datos_validos["horario"], [ana]))
+
+    # Act y Assert
+    with pytest.raises(ErrorInscripcion,
+                       match="El DNI 30123456 ya tiene una inscripción"):
+        inscribir(**datos_validos)
+    assert len(registro) == 1
