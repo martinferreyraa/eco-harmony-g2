@@ -46,19 +46,22 @@ def validar_seleccion(actividad, horario):
         raise ErrorInscripcion("Debe seleccionar un horario")
 
 
+def es_numero(texto):
+    # isdigit() solo acepta también "²" o "٣"; isascii() deja solo 0 a 9
+    return texto.isascii() and texto.isdigit()
+
+
 def validar_visitante(visitante):
     if not visitante.nombre:
         raise ErrorInscripcion("Debe ingresar el nombre de cada visitante")
     if not visitante.dni:
         raise ErrorInscripcion("Debe ingresar el DNI de cada visitante")
-    dni_es_numero = visitante.dni.isascii() and visitante.dni.isdigit()
-    if not dni_es_numero or len(visitante.dni) not in (7, 8):
+    if not es_numero(visitante.dni) or len(visitante.dni) not in (7, 8):
         raise ErrorInscripcion(
             "El DNI debe tener 7 u 8 dígitos, sin puntos ni espacios")
     if not visitante.edad:
         raise ErrorInscripcion("Debe ingresar la edad de cada visitante")
-    edad_es_numero = visitante.edad.isascii() and visitante.edad.isdigit()
-    if not edad_es_numero or int(visitante.edad) > 120:
+    if not es_numero(visitante.edad) or int(visitante.edad) > 120:
         raise ErrorInscripcion(
             "La edad debe ser un número entero entre 0 y 120")
 

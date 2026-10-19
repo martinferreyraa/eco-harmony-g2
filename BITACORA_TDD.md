@@ -49,6 +49,7 @@
 | 38 | `test_falla_envio_mail_no_inscribe` | Con el servidor caído, el `ConnectionError` salía tal cual, sin un mensaje para el visitante: `ConnectionError: El servidor de mail no responde`. | `inscribir` envuelve `enviador.enviar` en `try/except OSError` y lanza `ErrorInscripcion`; como el `append` está después, no se registra ni se descuenta cupo. | No hizo falta. |
 | 39 | `test_dni_repetido_misma_inscripcion` | El mismo DNI cargado dos veces en el formulario se aceptaba: `DID NOT RAISE ErrorInscripcion`. | Nace `validar_dnis_distintos`: recorre los visitantes guardando los DNI ya vistos y lanza error si uno se repite. | No hizo falta. |
 | 40 | Dígitos no ASCII en `test_dni_invalido` y `test_edad_invalida` | `isdigit()` acepta "²": el DNI "²²²²²²²" pasaba (`DID NOT RAISE`) y la edad "²" rompía con `ValueError` en `int()`. | DNI y edad exigen `isascii()` además de `isdigit()`, así solo valen los dígitos 0 a 9. | Ver fila R8. |
+| R8 | Refactor de dígitos ASCII | — | — | El chequeo repetido `isascii() and isdigit()` pasó a la función `es_numero(texto)`, usada por DNI y edad. 51 tests en verde. |
 
 ## Supuestos
 
