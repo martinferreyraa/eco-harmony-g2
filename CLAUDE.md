@@ -178,7 +178,9 @@ Empezá: actualizá el CLAUDE.md, hacé el ciclo 0 y escribí
 
 1. Camino feliz: `test_inscripcion_exitosa`
 2. Presencia: `test_no_seleccionar_actividad`, `test_no_seleccionar_horario`,
-   `test_nombre_vacio`, `test_dni_vacio`, `test_edad_vacia`, `test_no_acepta_terminos`
+   `test_nombre_vacio`, `test_dni_vacio`, `test_edad_vacia`, `test_no_acepta_terminos`,
+   `test_actividad_inexistente` (decisión del grupo; cuando exista `ACTIVIDADES`
+   en `reglas.py`; mensaje distinto al de "no seleccionó actividad")
 3. Formato: `test_dni_invalido`, `test_edad_invalida`, `test_edad_cero_valida`
 4. Por actividad: `test_talle_requerido_faltante`, `test_talle_no_requerido_omitido`,
    `test_talle_invalido`, `test_edad_menor_minimo_palestra`,
