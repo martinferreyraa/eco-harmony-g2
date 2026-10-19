@@ -65,7 +65,7 @@
 | 50 | Cambio de flujo: turno antes que los visitantes (web, sin tests nuevos) | — | La primera pantalla pide actividad, fecha, hora y cantidad y el Continuar llama a `validar_reserva`; la segunda recibe esos datos ocultos y pide visitantes y términos. Si `inscribir` falla en actividad, horario o cantidad, vuelve a la primera pantalla. Probado con el servidor real: Safari lleno, lunes, turno pasado y flujo feliz con mail enviado. | Sin cambios en el dominio más allá de R11. |
 | 51 | `test_registro_guarda_y_lee_una_inscripcion` (persistencia) | Stub `RegistroSQLite` con solo `__init__`: `AttributeError` (no tiene `append`). | "Fake it": una lista interna con `append` y `__iter__`; todavía no hay SQLite, porque un solo test no lo pide. | No hizo falta. |
 | 52 | `test_registro_cuenta_inscripciones` | `TypeError: object of type 'RegistroSQLite' has no len()`: `inscribir` usa `len(registro)` para el número de orden. | `__len__` devuelve el largo de la lista interna. | No hizo falta. |
-| 53 | `test_otra_instancia_ve_lo_guardado` | La segunda instancia sobre el mismo archivo devolvió `[]`: la lista interna se pierde con el objeto (lo mismo que pasaría al reiniciar la app). | | |
+| 53 | `test_otra_instancia_ve_lo_guardado` | La segunda instancia sobre el mismo archivo devolvió `[]`: la lista interna se pierde con el objeto (lo mismo que pasaría al reiniciar la app). | Aparece SQLite: `__init__` crea las tablas `inscripciones` y `visitantes` si no existen (y el archivo, si falta); `append` guarda la inscripción y sus visitantes en una sola transacción; `__iter__` y `__len__` leen del archivo. Una conexión por operación (Flask usa hilos). El horario se guarda en texto ISO. | Ver R12. |
 
 ## Supuestos
 
