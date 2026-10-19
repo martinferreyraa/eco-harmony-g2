@@ -20,3 +20,16 @@ def test_seed_llena_el_proximo_turno_reservable_de_safari(registro, ahora,
     inscribir("Jardinería", proximo_turno, 1, [visitante], True,
               registro, ahora, enviador)
     assert len(registro) == 2
+
+
+def test_seed_no_duplica_el_turno_lleno(registro, ahora):
+    # Arrange: la app ya arrancó una vez y el turno quedó lleno
+    proximo_turno = datetime(2026, 10, 20, 11, 0)
+    crear_seed(registro, ahora)
+
+    # Act: la app arranca de nuevo con la misma base
+    crear_seed(registro, ahora)
+
+    # Assert
+    assert len(registro) == 1
+    assert cupo_disponible("Safari", proximo_turno, registro) == 0
