@@ -252,3 +252,21 @@ def test_actividad_sin_cupo(datos_validos, registro):
                        match="No hay cupo disponible para Safari"):
         inscribir(**datos_validos)
     assert len(registro) == 1
+
+
+def test_cantidad_supera_cupo_disponible(datos_validos, registro):
+    # Arrange: quedan 2 lugares en Safari y se quieren anotar 3 personas
+    registro.append(Inscripcion("Safari", datos_validos["horario"],
+                                crear_visitantes(6)))
+    datos_validos["cantidad"] = 3
+    datos_validos["visitantes"] = [
+        Visitante("Ana Pérez", "30123456", "25"),
+        Visitante("Luis Gómez", "31234567", "40"),
+        Visitante("Sofía Díaz", "32345678", "10"),
+    ]
+
+    # Act y Assert
+    with pytest.raises(ErrorInscripcion,
+                       match="Solo quedan 2 lugares disponibles"):
+        inscribir(**datos_validos)
+    assert len(registro) == 1
