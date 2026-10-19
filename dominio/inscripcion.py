@@ -142,6 +142,23 @@ def validar_superposicion(horario, visitantes, registro):
                 "horario")
 
 
+def armar_cuerpo(actividad, horario, visitantes):
+    lineas = [
+        "Tu inscripción fue confirmada.",
+        f"Actividad: {actividad}",
+        f"Fecha y hora: {horario:%d/%m/%Y %H:%M}",
+        f"Cantidad de personas: {len(visitantes)}",
+        "Visitantes:",
+    ]
+    for visitante in visitantes:
+        linea = (f"- {visitante.nombre}, DNI {visitante.dni}, "
+                 f"{visitante.edad} años")
+        if visitante.talle:
+            linea += f", talle {visitante.talle}"
+        lineas.append(linea)
+    return "\n".join(lineas)
+
+
 def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
               registro, ahora, enviador):
     validar_seleccion(actividad, horario)
@@ -156,7 +173,8 @@ def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
             "Debe aceptar los términos y condiciones de la actividad")
     validar_cupo(actividad, horario, cantidad, registro)
     validar_superposicion(horario, visitantes, registro)
-    mail = Mail(f"Inscripción confirmada: {actividad}", "", [])
+    cuerpo = armar_cuerpo(actividad, horario, visitantes)
+    mail = Mail(f"Inscripción confirmada: {actividad}", cuerpo, [])
     enviador.enviar(mail)
     inscripcion = Inscripcion(actividad, horario, visitantes)
     registro.append(inscripcion)

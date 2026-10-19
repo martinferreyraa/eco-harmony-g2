@@ -42,6 +42,7 @@
 | 32 | `test_dni_inscripto_mismo_horario` | Ana ya estaba en Tirolesa a las 12:00 y se la podía anotar en Safari a la misma hora: `DID NOT RAISE ErrorInscripcion`. | `dnis_inscriptos` junta los DNI ya anotados en ese horario (cualquier actividad) y `validar_superposicion` rechaza a quien ya esté. | No hizo falta: ya quedó separado en dos funciones cortas. |
 | 33 | `test_envia_mail_al_confirmar` | Primero fallaron los 43 tests con `TypeError` (faltaba el parámetro `enviador`); con el stub, quedó solo el nuevo: `assert 0 == 1` (no se enviaba ningún mail). | Nace el dataclass `Mail(asunto, cuerpo, qrs)`; `inscribir` llama a `enviador.enviar(mail)` después de validar y antes de registrar. Cuerpo y QR quedan vacíos hasta sus tests. | No hizo falta. |
 | 34 | `test_no_envia_mail_si_validacion_falla` | No hubo Red: pasó de entrada, porque en el ciclo 33 el envío quedó después de todas las validaciones. Fija ese orden. | No hizo falta código nuevo. | No hizo falta. |
+| 35 | `test_mail_incluye_resumen` | El cuerpo del mail estaba vacío: `assert "Actividad: Palestra" in ""`. | Nace `armar_cuerpo`: arma el texto línea por línea con actividad, fecha y hora, cantidad y una línea por visitante (con talle solo si tiene). | No hizo falta. |
 
 ## Supuestos
 
@@ -57,3 +58,4 @@ Cosas que no estaban escritas en CLAUDE.md y se resolvieron con la opción más 
 - La cantidad de personas llega como número entero: en la GUI se elige de una lista desplegable y la web la convierte con `int(...)`.
 - El cupo no se guarda: se calcula como `CUPOS[actividad]` menos las personas ya inscriptas en ese turno (contadas en `registro`). "Descontar el cupo" es agregar la inscripción al registro.
 - La superposición se controla por horario de inicio: como todos los turnos duran una hora y empiezan en punto, "mismo horario" es "mismo inicio". También bloquea el mismo DNI dos veces en la misma actividad y turno.
+- El resumen del mail lleva actividad, fecha y hora, cantidad de personas, número de orden y una línea por visitante con nombre, DNI, edad y talle (si tiene). El grupo eligió "Other" en esa pregunta pero no llegó el texto; se siguió el FAQ #18 (detalle de visitantes).
