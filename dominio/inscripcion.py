@@ -51,6 +51,13 @@ def es_numero(texto):
     return texto.isascii() and texto.isdigit()
 
 
+def es_dni_valido(dni):
+    # 7 u 8 dígitos sin ceros adelante: de 1.000.000 a 99.999.999
+    if not es_numero(dni) or dni.startswith("0"):
+        return False
+    return len(dni) in (7, 8)
+
+
 def es_palabra_de_nombre(palabra):
     # Empieza y termina con letra; adentro puede tener apóstrofo o guion
     if not palabra[0].isalpha() or not palabra[-1].isalpha():
@@ -82,9 +89,10 @@ def validar_visitante(visitante):
             "Ingresá el nombre completo (nombre y apellido), solo con letras")
     if not visitante.dni:
         raise ErrorInscripcion("Debe ingresar el DNI de cada visitante")
-    if not es_numero(visitante.dni) or len(visitante.dni) not in (7, 8):
+    if not es_dni_valido(visitante.dni):
         raise ErrorInscripcion(
-            "El DNI debe tener 7 u 8 dígitos, sin puntos ni espacios")
+            "El DNI debe tener 7 u 8 dígitos, sin puntos, espacios ni "
+            "ceros adelante")
     if not visitante.edad:
         raise ErrorInscripcion("Debe ingresar la edad de cada visitante")
     if not es_numero(visitante.edad) or int(visitante.edad) > 120:
