@@ -321,3 +321,14 @@ def test_dia_feriado_cerrado(datos_validos, registro, horario):
                        match="El parque está cerrado el 25/12 y el 1/1"):
         inscribir(**datos_validos)
     assert len(registro) == 0
+
+
+def test_turno_ya_pasado(datos_validos, registro):
+    # Arrange: son las 10:00 y el turno de las 9:00 ya empezó
+    datos_validos["horario"] = datetime(2026, 10, 20, 9, 0)
+
+    # Act y Assert
+    with pytest.raises(ErrorInscripcion,
+                       match="El turno seleccionado ya pasó"):
+        inscribir(**datos_validos)
+    assert len(registro) == 0

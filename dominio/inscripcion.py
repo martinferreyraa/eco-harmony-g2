@@ -83,7 +83,7 @@ def validar_cupo(actividad, horario, cantidad, registro):
 
 
 def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
-              registro):
+              registro, ahora):
     validar_seleccion(actividad, horario)
     es_turno_en_punto = horario.minute == 0
     esta_en_rango = HORA_PRIMER_TURNO <= horario.hour <= HORA_ULTIMO_TURNO
