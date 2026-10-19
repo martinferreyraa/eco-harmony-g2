@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from pathlib import Path
 
 from flask import Flask, render_template, request
 from werkzeug.datastructures import MultiDict
@@ -11,6 +12,7 @@ from dominio.reglas import (ACTIVIDADES, CUPOS, FERIADOS, HORA_PRIMER_TURNO,
                             TALLES, TERMINOS)
 from dominio.seed import crear_seed
 from servicios.mail import EnviadorSMTP
+from servicios.registro_sqlite import RegistroSQLite
 
 app = Flask(__name__)
 
@@ -19,11 +21,13 @@ MAXIMO_PERSONAS = max(CUPOS.values())
 DIAS_CERRADOS = {"lunes": LUNES, "feriados": FERIADOS}
 # Errores que se corrigen en la primera pantalla
 CAMPOS_DE_LA_RESERVA = ["actividad", "horario", "cantidad"]
+# En la raíz del proyecto, sin importar desde dónde se corre Flask
+RUTA_BASE_DE_DATOS = Path(__file__).parent.parent / "eco_harmony.db"
 
 
 def crear_registro():
-    """Único lugar donde se crea el registro (por ahora, en memoria)."""
-    registro = []
+    """Único lugar donde se crea el registro: la base SQLite y su seed."""
+    registro = RegistroSQLite(RUTA_BASE_DE_DATOS)
     crear_seed(registro, datetime.now())
     return registro
 

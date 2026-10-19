@@ -71,6 +71,7 @@
 | 54 | `test_seed_no_duplica_el_turno_lleno` | Con la base persistente, el seed corre en cada arranque: la segunda llamada agregó otra inscripción (`assert 2 == 1`) y el cupo de Safari habría quedado en -8. | Si `cupo_disponible("Safari", turno, registro) == 0`, `crear_seed` no agrega nada. | No hizo falta: los dos `if ... return` (sin turno, turno lleno) se leen mejor separados que unidos con `or`. |
 | 55 | `test_seed_completa_el_turno_con_lugares_ocupados` (triangulación del 54) | Con 3 personas ya anotadas en el turno, el seed agregó 8 visitantes en vez de 5 (`assert 8 == 5`): el cupo habría quedado en -3. | El seed crea tantos visitantes como `cupo_disponible(...)` (los lugares que faltan) en vez de `CUPOS["Safari"]`; si son 0, no agrega nada. | Ver R14. |
 | R14 | Refactor: import sin uso en `seed.py` | — | — | Después del ciclo 55 el seed ya no usa `CUPOS` (lo calcula `cupo_disponible`): se borró el import. 66 tests en verde. |
+| 56 | La web guarda en SQLite (sin tests nuevos) | — | `crear_registro()` crea `RegistroSQLite` sobre `eco_harmony.db` (en la raíz del proyecto, ruta armada con `Path(__file__)`) y llama a `crear_seed`. `*.db` va al `.gitignore`. Probado con el servidor real: se crea la base, Safari aparece completo, inscripción en Tirolesa confirmada; al reiniciar, Tirolesa sigue en 8 lugares y Safari no se duplicó (2 inscripciones y 10 visitantes en la base). | Sin cambios en el dominio. |
 
 ## Supuestos
 
