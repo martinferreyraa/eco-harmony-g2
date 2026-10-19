@@ -308,3 +308,16 @@ def test_dia_lunes_cerrado(datos_validos, registro):
                        match="El parque está cerrado los lunes"):
         inscribir(**datos_validos)
     assert len(registro) == 0
+
+
+@pytest.mark.parametrize("horario", [datetime(2026, 12, 25, 12, 0),
+                                     datetime(2027, 1, 1, 12, 0)])
+def test_dia_feriado_cerrado(datos_validos, registro, horario):
+    # Arrange: el parque cierra el 25/12 y el 1/1
+    datos_validos["horario"] = horario
+
+    # Act y Assert
+    with pytest.raises(ErrorInscripcion,
+                       match="El parque está cerrado el 25/12 y el 1/1"):
+        inscribir(**datos_validos)
+    assert len(registro) == 0
