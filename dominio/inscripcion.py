@@ -35,5 +35,8 @@ def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
         if not visitante.edad:
             raise ErrorInscripcion(
                 "Debe ingresar la edad de cada visitante")
+    if not acepta_terminos:
+        raise ErrorInscripcion(
+            "Debe aceptar los términos y condiciones de la actividad")
     inscripcion = Inscripcion(actividad, horario, visitantes)
     registro.append(inscripcion)
