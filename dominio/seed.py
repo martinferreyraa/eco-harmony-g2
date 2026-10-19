@@ -1,6 +1,7 @@
 from datetime import timedelta
 
-from dominio.inscripcion import Inscripcion, Visitante, es_reservable
+from dominio.inscripcion import (Inscripcion, Visitante,
+                                 cupo_disponible, es_reservable)
 from dominio.reglas import ANTICIPACION_MAXIMA, CUPOS
 
 
@@ -18,6 +19,8 @@ def crear_seed(registro, ahora):
     """Datos de la demo: llena el próximo turno de Safari en el registro."""
     turno = proximo_turno_reservable(ahora)
     if turno is None:
+        return
+    if cupo_disponible("Safari", turno, registro) == 0:
         return
     visitantes = []
     for numero in range(CUPOS["Safari"]):
