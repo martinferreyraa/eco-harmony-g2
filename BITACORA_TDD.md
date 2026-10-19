@@ -58,6 +58,7 @@
 | 45 | Campo en los errores del horario (8 tests: sin horario, fuera de rango, lunes, feriado, ya pasó, más de 24 hs, menos de 15 min, sin cupo) | Los 11 casos pedían `campo == "horario"` y recibían `None`. | Los errores de `validar_seleccion` (horario), `validar_turno`, `validar_anticipacion` y el de "sin cupo" pasan `"horario"`. | No hizo falta. |
 | 46 | Campo en los errores de cantidad (`test_cantidad_cero`, `test_cantidad_no_coincide_con_visitantes`, `test_cantidad_supera_cupo_disponible`) | Los 3 tests pedían `campo == "cantidad"` y recibían `None`. | Los dos errores de `validar_cantidad` y el de "solo quedan N lugares" pasan `"cantidad"`. | No hizo falta. |
 | 47 | Campo en el error de términos (`test_no_acepta_terminos`) | El test pedía `campo == "terminos"` y recibía `None`. | El error de términos pasa `"terminos"`. | No hizo falta. |
+| 48 | Campo en los errores de cada visitante (12 tests existentes y `test_error_de_visitante_indica_su_numero`, nuevo, con el error en el segundo visitante) | 29 casos pedían `nombre-N`, `dni-N`, `edad-N` o `talle-N` y recibían `None`. | `inscribir` recorre los visitantes con `enumerate` y pasa el `indice`; `validar_visitante`, `validar_reglas_de_actividad`, `validar_dnis_distintos` y `validar_superposicion` arman el campo con `f"dni-{indice}"`, etc. | No hizo falta. |
 
 ## Supuestos
 

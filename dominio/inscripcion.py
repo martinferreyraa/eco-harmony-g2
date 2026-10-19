@@ -86,37 +86,46 @@ def es_nombre_completo(nombre):
     return True
 
 
-def validar_visitante(visitante):
+def validar_visitante(visitante, indice):
+    # indice: posición del visitante en el formulario (0 es el primero)
     if not visitante.nombre:
-        raise ErrorInscripcion("Debe ingresar el nombre de cada visitante")
+        raise ErrorInscripcion("Debe ingresar el nombre de cada visitante",
+                               f"nombre-{indice}")
     if not es_nombre_completo(visitante.nombre):
         raise ErrorInscripcion(
-            "Ingresá el nombre completo (nombre y apellido), solo con letras")
+            "Ingresá el nombre completo (nombre y apellido), solo con letras",
+            f"nombre-{indice}")
     if not visitante.dni:
-        raise ErrorInscripcion("Debe ingresar el DNI de cada visitante")
+        raise ErrorInscripcion("Debe ingresar el DNI de cada visitante",
+                               f"dni-{indice}")
     if not es_dni_valido(visitante.dni):
         raise ErrorInscripcion(
             "El DNI debe tener 7 u 8 dígitos, sin puntos, espacios ni "
-            "ceros adelante")
+            "ceros adelante", f"dni-{indice}")
     if not visitante.edad:
-        raise ErrorInscripcion("Debe ingresar la edad de cada visitante")
+        raise ErrorInscripcion("Debe ingresar la edad de cada visitante",
+                               f"edad-{indice}")
     if not es_numero(visitante.edad) or int(visitante.edad) > 120:
         raise ErrorInscripcion(
-            "La edad debe ser un número entero entre 0 y 120")
+            "La edad debe ser un número entero entre 0 y 120",
+            f"edad-{indice}")
 
 
-def validar_reglas_de_actividad(visitante, actividad):
+def validar_reglas_de_actividad(visitante, actividad, indice):
     if actividad in REQUIEREN_TALLE:
         if not visitante.talle:
             raise ErrorInscripcion(
-                f"{actividad} requiere el talle de cada visitante")
+                f"{actividad} requiere el talle de cada visitante",
+                f"talle-{indice}")
         if visitante.talle not in TALLES:
             raise ErrorInscripcion(
-                "El talle debe ser uno de: " + ", ".join(TALLES))
+                "El talle debe ser uno de: " + ", ".join(TALLES),
+                f"talle-{indice}")
     edad_minima = EDAD_MINIMA.get(actividad, 0)
     if int(visitante.edad) < edad_minima:
         raise ErrorInscripcion(
-            f"La edad mínima para {actividad} es {edad_minima} años")
+            f"La edad mínima para {actividad} es {edad_minima} años",
+            f"edad-{indice}")
 
 
 def es_reservable(turno, ahora):
@@ -141,10 +150,11 @@ def validar_cantidad(cantidad, visitantes):
 
 def validar_dnis_distintos(visitantes):
     vistos = []
-    for visitante in visitantes:
+    for indice, visitante in enumerate(visitantes):
         if visitante.dni in vistos:
             raise ErrorInscripcion(
-                f"El DNI {visitante.dni} está repetido en la inscripción")
+                f"El DNI {visitante.dni} está repetido en la inscripción",
+                f"dni-{indice}")
         vistos.append(visitante.dni)
 
 
@@ -208,11 +218,11 @@ def dnis_inscriptos(horario, registro):
 
 def validar_superposicion(horario, visitantes, registro):
     ya_inscriptos = dnis_inscriptos(horario, registro)
-    for visitante in visitantes:
+    for indice, visitante in enumerate(visitantes):
         if visitante.dni in ya_inscriptos:
             raise ErrorInscripcion(
                 f"El DNI {visitante.dni} ya tiene una inscripción en ese "
-                "horario")
+                "horario", f"dni-{indice}")
 
 
 def armar_cuerpo(numero_orden, actividad, horario, visitantes):
@@ -253,9 +263,9 @@ def inscribir(actividad, horario, cantidad, visitantes, acepta_terminos,
     validar_turno(horario)
     validar_anticipacion(horario, ahora)
     validar_cantidad(cantidad, visitantes)
-    for visitante in visitantes:
-        validar_visitante(visitante)
-        validar_reglas_de_actividad(visitante, actividad)
+    for indice, visitante in enumerate(visitantes):
+        validar_visitante(visitante, indice)
+        validar_reglas_de_actividad(visitante, actividad, indice)
     validar_dnis_distintos(visitantes)
     if not acepta_terminos:
         raise ErrorInscripcion(
