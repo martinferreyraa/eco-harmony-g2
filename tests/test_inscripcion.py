@@ -55,3 +55,14 @@ def test_dni_vacio(datos_validos, registro):
                        match="Debe ingresar el DNI de cada visitante"):
         inscribir(**datos_validos)
     assert len(registro) == 0
+
+
+def test_edad_vacia(datos_validos, registro):
+    # Arrange
+    datos_validos["visitantes"][0].edad = ""
+
+    # Act y Assert
+    with pytest.raises(ErrorInscripcion,
+                       match="Debe ingresar la edad de cada visitante"):
+        inscribir(**datos_validos)
+    assert len(registro) == 0
