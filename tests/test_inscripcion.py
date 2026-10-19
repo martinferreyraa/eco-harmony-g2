@@ -30,8 +30,9 @@ def test_no_seleccionar_actividad(datos_validos, registro):
 
     # Act y Assert
     with pytest.raises(ErrorInscripcion,
-                       match="Debe seleccionar una actividad"):
+                       match="Debe seleccionar una actividad") as error:
         inscribir(**datos_validos)
+    assert error.value.campo == "actividad"
     assert len(registro) == 0
 
 
@@ -96,8 +97,9 @@ def test_actividad_inexistente(datos_validos, registro):
 
     # Act y Assert
     with pytest.raises(ErrorInscripcion,
-                       match="La actividad seleccionada no existe"):
+                       match="La actividad seleccionada no existe") as error:
         inscribir(**datos_validos)
+    assert error.value.campo == "actividad"
     assert len(registro) == 0
 
 
