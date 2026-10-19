@@ -12,7 +12,11 @@ FORMATO_FECHA_HORA = "%d/%m/%Y %H:%M"
 
 
 class ErrorInscripcion(Exception):
-    pass
+    """Error con su mensaje y el campo del formulario donde mostrarlo."""
+
+    def __init__(self, mensaje, campo=None):
+        super().__init__(mensaje)
+        self.campo = campo
 
 
 @dataclass
@@ -39,9 +43,10 @@ class Mail:
 
 def validar_seleccion(actividad, horario):
     if not actividad:
-        raise ErrorInscripcion("Debe seleccionar una actividad")
+        raise ErrorInscripcion("Debe seleccionar una actividad", "actividad")
     if actividad not in ACTIVIDADES:
-        raise ErrorInscripcion("La actividad seleccionada no existe")
+        raise ErrorInscripcion("La actividad seleccionada no existe",
+                               "actividad")
     if not horario:
         raise ErrorInscripcion("Debe seleccionar un horario")
 

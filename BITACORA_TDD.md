@@ -54,6 +54,7 @@
 | R9 | Refactor: `es_reservable` a `inscripcion.py` | — | — | `es_reservable` pasó de `seed.py` a `inscripcion.py`, junto a `validar_turno` y `validar_anticipacion`, porque también la usa la vista de cupos. 52 tests en verde. |
 | 42 | `test_nombre_invalido` (6 casos) | Una sola palabra, números, símbolos, punto, una letra por palabra y solo espacios se aceptaban: 6 `DID NOT RAISE`. Se cambió "Ana P." del test de DNI repetido por un nombre completo. | Nacen `es_palabra_de_nombre` (empieza y termina con letra, adentro solo letras, apóstrofo o guion, al menos 2 letras) y `es_nombre_completo` (al menos 2 palabras válidas). | No hizo falta. |
 | 43 | Ceros adelante en `test_dni_invalido` | "00000000" y "0123456" se aceptaban porque solo se miraba la cantidad de dígitos: 2 `DID NOT RAISE`. | Nace `es_dni_valido`: solo dígitos, sin cero adelante y 7 u 8 caracteres (de 1.000.000 a 99.999.999). El mensaje suma "ni ceros adelante". | No hizo falta: el chequeo ya quedó en su propia función. |
+| 44 | Campo en los errores de actividad (`test_no_seleccionar_actividad`, `test_actividad_inexistente`) | Los tests ahora piden `error.value.campo == "actividad"`: `AttributeError` (el error no tenía campo). | `ErrorInscripcion` recibe `mensaje` y `campo` (por defecto `None`); los dos errores de actividad pasan `"actividad"`. | No hizo falta. |
 
 ## Supuestos
 
