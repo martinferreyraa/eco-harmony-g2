@@ -163,6 +163,17 @@ def test_edad_cero_valida(datos_validos, registro):
     assert len(registro) == 1
 
 
+def test_edad_maxima_valida_pasa(datos_validos, registro):
+    # Arrange: 120 es la edad más alta permitida
+    datos_validos["visitantes"][0].edad = "120"
+
+    # Act
+    inscribir(**datos_validos)
+
+    # Assert
+    assert len(registro) == 1
+
+
 def test_talle_requerido_faltante(datos_validos, registro):
     # Arrange: Palestra requiere talle y el visitante no lo trae
     datos_validos["actividad"] = "Palestra"
