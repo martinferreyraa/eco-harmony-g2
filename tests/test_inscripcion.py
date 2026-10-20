@@ -188,6 +188,19 @@ def test_talle_invalido(datos_validos, registro):
     assert len(registro) == 0
 
 
+def test_talle_invalido_se_ignora_si_la_actividad_no_lo_requiere(
+        datos_validos, registro):
+    # Arrange: Jardinería no pide talle, así que "ZZ" no importa
+    datos_validos["actividad"] = "Jardinería"
+    datos_validos["visitantes"][0].talle = "ZZ"
+
+    # Act
+    inscribir(**datos_validos)
+
+    # Assert
+    assert len(registro) == 1
+
+
 def test_edad_menor_minimo_palestra(datos_validos, registro):
     # Arrange
     datos_validos["actividad"] = "Palestra"
