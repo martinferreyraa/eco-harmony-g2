@@ -40,7 +40,7 @@ class EnviadorSMTP:
 
     def enviar(self, mail):
         mensaje = self.armar_mensaje(mail)
-        with smtplib.SMTP(self.host, self.puerto) as servidor:
+        with smtplib.SMTP(self.host, self.puerto, timeout=10) as servidor:
             servidor.starttls()
             servidor.login(self.usuario, self.clave)
             servidor.send_message(mensaje)
