@@ -126,6 +126,7 @@ label {
 
 input[type="text"],
 input[type="date"],
+input[type="number"],
 select {
   width: 100%;
   margin-top: 4px;

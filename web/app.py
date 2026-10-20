@@ -7,7 +7,7 @@ from werkzeug.datastructures import MultiDict
 from dominio.inscripcion import (ErrorInscripcion, Visitante, cupo_disponible,
                                  es_numero, es_reservable, inscribir,
                                  validar_reserva)
-from dominio.reglas import (ACTIVIDADES, CUPOS, FERIADOS, HORA_PRIMER_TURNO,
+from dominio.reglas import (ACTIVIDADES, FERIADOS, HORA_PRIMER_TURNO,
                             HORA_ULTIMO_TURNO, LUNES, REQUIEREN_TALLE,
                             TALLES, TERMINOS)
 from dominio.seed import crear_seed
@@ -17,7 +17,6 @@ from servicios.registro_sqlite import RegistroSQLite
 app = Flask(__name__)
 
 HORAS = list(range(HORA_PRIMER_TURNO, HORA_ULTIMO_TURNO + 1))
-MAXIMO_PERSONAS = max(CUPOS.values())
 DIAS_CERRADOS = {"lunes": LUNES, "feriados": FERIADOS}
 # Errores que se corrigen en la primera pantalla
 CAMPOS_DE_LA_RESERVA = ["actividad", "horario", "cantidad"]
@@ -76,7 +75,7 @@ def mostrar_inicio(reserva, error=None):
     hoy = datetime.now().date()
     return render_template(
         "inicio.html", actividades=ACTIVIDADES, horas=HORAS,
-        maximo_personas=MAXIMO_PERSONAS, dias_cerrados=DIAS_CERRADOS,
+        dias_cerrados=DIAS_CERRADOS,
         fecha_minima=hoy.isoformat(),
         fecha_maxima=(hoy + timedelta(days=1)).isoformat(),
         reserva=reserva, error=error)
