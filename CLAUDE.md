@@ -171,15 +171,19 @@ tests/
 4. Por actividad: `test_talle_requerido_faltante`, `test_talle_no_requerido_omitido`,
    `test_talle_invalido`, `test_edad_menor_minimo_palestra`,
    `test_edad_menor_minimo_tirolesa`, `test_edad_igual_minimo_pasa`,
-   `test_safari_sin_limite_edad`
+   `test_safari_sin_limite_edad`,
+   `test_talle_invalido_se_ignora_si_la_actividad_no_lo_requiere` (borde)
 5. Cantidad y cupo: `test_cantidad_cero`, `test_cantidad_no_coincide_con_visitantes`,
    `test_actividad_sin_cupo`, `test_cantidad_supera_cupo_disponible`,
-   `test_inscripcion_descuenta_cupo`
+   `test_inscripcion_descuenta_cupo`,
+   `test_cantidad_igual_al_cupo_restante_pasa` (borde)
 6. Tiempo: `test_turno_fuera_de_rango`, `test_dia_lunes_cerrado`,
    `test_dia_feriado_cerrado`, `test_turno_ya_pasado`, `test_reserva_mas_de_24hs_antes`,
    `test_reserva_menos_de_15min_antes`, `test_reserva_justo_24hs_antes_pasa`,
-   `test_reserva_justo_15min_antes_pasa`
-7. Superposición: `test_dni_inscripto_mismo_horario`
+   `test_reserva_justo_15min_antes_pasa`,
+   `test_turno_primero_y_ultimo_validos` (borde)
+7. Superposición: `test_dni_inscripto_mismo_horario`,
+   `test_mismo_dni_en_otro_horario_pasa` (borde)
 8. Mail y QR: `test_envia_mail_al_confirmar`,
    `test_no_envia_mail_si_validacion_falla`,
    `test_mail_incluye_resumen`, `test_mail_incluye_numero_de_orden`,
