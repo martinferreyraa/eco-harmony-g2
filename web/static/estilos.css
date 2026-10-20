@@ -37,10 +37,18 @@ a {
 }
 
 .marca {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   color: var(--blanco);
   font-size: 1.3rem;
   font-weight: 900;
   text-decoration: none;
+}
+
+.logo {
+  width: 96px;
+  height: 96px;
 }
 
 .menu {
@@ -284,6 +292,11 @@ select:focus {
 
 /* Celular */
 @media (max-width: 560px) {
+  .logo {
+    width: 72px;
+    height: 72px;
+  }
+
   .contenido {
     margin: 16px auto;
   }
