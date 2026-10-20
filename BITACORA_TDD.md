@@ -73,6 +73,7 @@
 | R14 | Refactor: import sin uso en `seed.py` | — | — | Después del ciclo 55 el seed ya no usa `CUPOS` (lo calcula `cupo_disponible`): se borró el import. 66 tests en verde. |
 | 56 | La web guarda en SQLite (sin tests nuevos) | — | `crear_registro()` crea `RegistroSQLite` sobre `eco_harmony.db` (en la raíz del proyecto, ruta armada con `Path(__file__)`) y llama a `crear_seed`. `*.db` va al `.gitignore`. Probado con el servidor real: se crea la base, Safari aparece completo, inscripción en Tirolesa confirmada; al reiniciar, Tirolesa sigue en 8 lugares y Safari no se duplicó (2 inscripciones y 10 visitantes en la base). | Sin cambios en el dominio. |
 | 57 | `test_cantidad_igual_al_cupo_restante_pasa` (borde, agregado en revisión posterior; Red verificado por mutación: `cantidad >= disponibles` en `validar_cupo`) | Con la mutación, 6 anotados en Safari y 2 más dio "Solo quedan 2 lugares disponibles". | Sin cambios: el código ya lo cumplía (CA: "siempre y cuando tengan cupos disponibles"); se revirtió la mutación. | No hizo falta. |
+| 58 | `test_turno_primero_y_ultimo_validos` (9:00 y 17:00; borde, agregado en revisión posterior; Red verificado por mutación: `<=` por `<` en el rango de `validar_turno`, una para cada borde) | `HORA_PRIMER_TURNO < hora` rechazó las 9:00; `hora < HORA_ULTIMO_TURNO` rechazó las 17:00. "Ahora" es 1 hora antes de cada turno, dentro de la ventana. | Sin cambios: el código ya lo cumplía (CA: "horario dentro de los disponibles"; FAQ #12); se revirtió la mutación. | No hizo falta. |
 
 ## Supuestos
 

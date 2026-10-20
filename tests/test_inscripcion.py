@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import pytest
 
@@ -342,6 +342,20 @@ def test_turno_fuera_de_rango(datos_validos, registro, horario):
         inscribir(**datos_validos)
     assert error.value.campo == "horario"
     assert len(registro) == 0
+
+
+@pytest.mark.parametrize("horario", [datetime(2026, 10, 20, 9, 0),
+                                     datetime(2026, 10, 20, 17, 0)])
+def test_turno_primero_y_ultimo_validos(datos_validos, registro, horario):
+    # Arrange: "ahora" es 1 hora antes, dentro de la ventana de reserva
+    datos_validos["horario"] = horario
+    datos_validos["ahora"] = horario - timedelta(hours=1)
+
+    # Act
+    inscribir(**datos_validos)
+
+    # Assert
+    assert len(registro) == 1
 
 
 def test_dia_lunes_cerrado(datos_validos, registro):
