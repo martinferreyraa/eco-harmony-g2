@@ -460,6 +460,19 @@ def test_dni_inscripto_mismo_horario(datos_validos, registro):
     assert len(registro) == 1
 
 
+def test_mismo_dni_en_otro_horario_pasa(datos_validos, registro):
+    # Arrange: Ana está inscripta a las 12:00 y se anota a las 13:00
+    ana = Visitante("Ana Pérez", "30123456", "25", "M")
+    registro.append(Inscripcion("Tirolesa", datos_validos["horario"], [ana]))
+    datos_validos["horario"] = datetime(2026, 10, 20, 13, 0)
+
+    # Act
+    inscribir(**datos_validos)
+
+    # Assert
+    assert len(registro) == 2
+
+
 def test_envia_mail_al_confirmar(datos_validos, enviador):
     # Act
     inscribir(**datos_validos)
