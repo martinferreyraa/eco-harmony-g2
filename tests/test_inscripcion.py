@@ -300,6 +300,24 @@ def test_cantidad_supera_cupo_disponible(datos_validos, registro):
     assert len(registro) == 1
 
 
+def test_cantidad_igual_al_cupo_restante_pasa(datos_validos, registro):
+    # Arrange: quedan 2 lugares en Safari y se anotan justo 2 personas
+    horario = datos_validos["horario"]
+    registro.append(Inscripcion("Safari", horario, crear_visitantes(6)))
+    datos_validos["cantidad"] = 2
+    datos_validos["visitantes"] = [
+        Visitante("Ana Pérez", "30123456", "25"),
+        Visitante("Luis Gómez", "31234567", "40"),
+    ]
+
+    # Act
+    inscribir(**datos_validos)
+
+    # Assert: se registra y el turno queda completo
+    assert len(registro) == 2
+    assert cupo_disponible("Safari", horario, registro) == 0
+
+
 def test_inscripcion_descuenta_cupo(datos_validos, registro):
     # Arrange
     horario = datos_validos["horario"]
