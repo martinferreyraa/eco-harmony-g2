@@ -1,6 +1,6 @@
 # TP6 TDD — Documento de decisiones de diseño
 
-Oct 19, 2026 · @Martín
+Grupo 2 · 4K3 · Fecha de entrega: 21/10/2026
 
 ## Contexto
 
@@ -26,8 +26,6 @@ Descartamos Tkinter y CustomTkinter porque no permiten una interfaz responsive n
 ## Arquitectura: dominio separado de la web
 
 Toda la lógica y las validaciones viven en `dominio/`, en una función `inscribir(...)`. La capa web no valida nada: recibe el formulario, llama a esa función y muestra el resultado o el mensaje de error.
-
-&#91;embedded content: arquitectura · 4 partes\]
 
 Los tests prueban `dominio/` directamente, sin abrir el navegador, así que corren en milisegundos. Así se cumple la consigna de probar todas las reglas aunque la interfaz ya las bloquee: el test valida la regla en el lugar donde vive. Cambiar la interfaz no toca ningún test.
 

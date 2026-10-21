@@ -32,8 +32,8 @@ ni implementes funcionalidad por adelantado.
 3. **Toda validación vive en `dominio/`.** La capa web no valida nada: solo recibe el
    formulario, llama a `inscribir(...)` y muestra el resultado o el mensaje de error.
 4. **Un mensaje de error distinto = un test distinto.**
-5. **Estilo de código: PEP 8** (reglas de estilo elegidas por el grupo en el TP2; el
-   enunciado del TP6 exige respetarlas). Nombres de funciones y variables en `snake_case`,
+5. **Estilo de código: PEP 8** (convención estándar de Python; el TP2 no definió
+   reglas propias). Nombres de funciones y variables en `snake_case`,
    constantes en `MAYUSCULAS`, líneas de 79 caracteres como máximo, 4 espacios de sangría.
 
 ## Términos y condiciones
