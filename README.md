@@ -75,5 +75,6 @@ dominio/     reglas de negocio y validaciones (lo que se testea)
 servicios/   mail SMTP, imagen del QR y registro en SQLite
 web/         Flask: rutas, plantillas y estilos (sin validaciones)
 tests/       tests de pytest
-BITACORA_TDD.md  cada ciclo Red / Green / Refactor y los supuestos
+Docs/        bitácora TDD (ciclos Red / Green / Refactor y supuestos),
+             decisiones de diseño y enunciado del TP6
 ```
