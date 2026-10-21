@@ -31,6 +31,10 @@ function revisarFecha(campo) {
   campo.setCustomValidity(mensaje);
   aviso.textContent = mensaje;
   aviso.hidden = mensaje === "";
+  if (mensaje) {
+    // FAQ #2: el día cerrado no queda seleccionado
+    campo.value = "";
+  }
 }
 
 for (const campo of document.querySelectorAll("[data-dias-cerrados]")) {
