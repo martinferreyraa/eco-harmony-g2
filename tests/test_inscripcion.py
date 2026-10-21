@@ -139,7 +139,7 @@ def test_dni_en_los_limites_del_rango_pasa(datos_validos, registro, dni):
     assert len(registro) == 1
 
 
-@pytest.mark.parametrize("edad",["abc", "-1", "2.5", "121", "²"])
+@pytest.mark.parametrize("edad", ["abc", "-1", "2.5", "121", "²"])
 def test_edad_invalida(datos_validos, registro, edad):
     # Arrange
     datos_validos["visitantes"][0].edad = edad
